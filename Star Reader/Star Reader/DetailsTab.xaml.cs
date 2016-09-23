@@ -77,7 +77,6 @@ namespace Star_Reader
         public DetailsTab(int portNr)
         {
             InitializeComponent();
-            
             PopulateOverview(portNr);
             DataGridCollection = CollectionViewSource.GetDefaultView(App.RecordingData[portNr].ListOfPackets);
             DataGridCollection.Filter = Filter;

@@ -50,7 +50,7 @@
             <Label FontSize="16" Grid.Row="0" Grid.Column="0" FontWeight="Bold">Search</Label>
             <TextBox Grid.Row="0" Grid.Column="1" x:Name="TextBox" Text="{Binding FilterString, UpdateSourceTrigger=PropertyChanged, Delay=300}" BorderThickness="2" BorderBrush="Black" FontSize="20"></TextBox>
             <DataGrid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="7" Margin="0,0,0,10" AutoGenerateColumns="False" ItemsSource="{Binding DataGridCollection}"
-                      Name="DetailedViewerA" ColumnWidth="*" SelectionMode="Single">
+                      Name="DetailedViewerA" ColumnWidth="*" SelectionMode="Extended" IsReadOnly="True">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Time" Binding="{Binding Time, StringFormat='MM/dd/yyyy HH:mm:ss.fff'}"></DataGridTextColumn>
                     <DataGridTextColumn Header="Payload" Binding="{Binding Payload}" Width="2.5*"></DataGridTextColumn>
