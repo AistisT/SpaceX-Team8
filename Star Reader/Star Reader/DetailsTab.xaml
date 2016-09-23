@@ -9,14 +9,14 @@
    
         mc:Ignorable="d"
          Height="720" Width="1280">
-
+    
     <!--strat grids-->
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-
+            
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
@@ -28,7 +28,7 @@
 
         <ScrollViewer BorderThickness="25" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2">
             <!--Change this rowspan to update left side-->
-            <WrapPanel Name="PacketViewerA" />
+                <WrapPanel Name="PacketViewerA" />
         </ScrollViewer>
         <Grid Grid.Row="0" Grid.RowSpan="6" Grid.Column="1">
             <!--Change this rowspan to update right side-->
@@ -36,7 +36,7 @@
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-
+                
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="*" />
@@ -64,15 +64,15 @@
                             <DataTrigger Binding="{Binding ErrorType}" Value="Disconnect">
                                 <Setter Property="Background" Value="#ff3333"/>
                             </DataTrigger>
-
+                                
                             <DataTrigger Binding="{Binding ErrorType}" Value="Parity">
                                 <Setter Property="Background" Value="Yellow"/>
                             </DataTrigger>
-
+                                
                             <DataTrigger Binding="{Binding PacketEnd}" Value="EOP">
                                 <Setter Property="Background" Value="#00dddd"/>
                             </DataTrigger>
-
+                                
                             <DataTrigger Binding="{Binding PacketEnd}" Value="None">
                                 <Setter Property="Background" Value="#ffaacc"/>
                             </DataTrigger>
@@ -114,20 +114,20 @@
                 <TextBlock Padding="0,0,5,0" Text="-Packet not send" />
             </StackPanel>
         </WrapPanel>
-        <Grid Grid.Row="3">
-
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ClipToBounds="True">
-                <Label Margin="80,50,0,0">Total number of packets</Label>
-                <Label  Margin="160,50,0,0">Total number of errors</Label>
-                <Label Margin="170,50,0,0">Total number of data characters</Label>
-            </StackPanel>
-
-            <lvc:Gauge Grid.Column="0" Uses360Mode="False" From="0" To="{Binding totalNubOfPackets}" Value="{Binding errValue}" 
+        <Grid Grid.Row="3" Grid.Column="0" Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            
+                  <lvc:Gauge Grid.Column="0" Uses360Mode="False" From="0" To="{Binding totalNubOfPackets}" Value="{Binding errValue}" 
                    LabelFormatter="{Binding Formatter}" />
             <lvc:Gauge   Grid.Column="1" Uses360Mode="False" From="0" To="100" Value="{Binding packetValue}" 
-                   LabelFormatter="{Binding Formatter}" />
+                   LabelFormatter="{Binding Formatter1}" />
             <lvc:Gauge   Grid.Column="2" Uses360Mode="False" From="0" To="100" Value="{Binding charValue}" 
-                   LabelFormatter="{Binding Formatter}" />
+                   LabelFormatter="{Binding Formatter2}" />
+         
         </Grid>
 
         <lvc:CartesianChart Grid.Row="4" Grid.Column="0" Margin="5,0,0,0">
