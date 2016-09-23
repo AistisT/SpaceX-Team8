@@ -274,10 +274,11 @@ namespace Star_Reader
 
         public SeriesCollection SeriesCollection { get; set; }
         public Func<double, string> Formatter { get; set; }
+        public Func<double, string> Formatter1 { get; set; }
+        public Func<double, string> Formatter2 { get; set; }
 
 
-
-       private void initialiseGauge()
+        private void initialiseGauge()
         {
             
           
@@ -286,6 +287,10 @@ namespace Star_Reader
             charValue = gData.getTotalPackets();
 
             Formatter = x => x + " ";
+
+            Formatter1 = x => x + " ";
+
+            Formatter2 = x => x + " ";
 
             DataContext = this;
 
