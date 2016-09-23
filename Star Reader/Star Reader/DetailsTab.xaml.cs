@@ -67,13 +67,17 @@ namespace Star_Reader
             if (packet == null) return false;
             if (string.IsNullOrEmpty(filterString)) return true;
             return packet.ErrorType != null && CultureInfo.CurrentCulture.CompareInfo.IndexOf(packet.ErrorType, filterString, CompareOptions.IgnoreCase) >= 0
-                || packet.Payload != null && CultureInfo.CurrentCulture.CompareInfo.IndexOf(packet.Payload, filterString, CompareOptions.IgnoreCase) >= 0;
+                || packet.Payload != null && CultureInfo.CurrentCulture.CompareInfo.IndexOf(packet.Payload, filterString, CompareOptions.IgnoreCase) >= 0
+                || packet.PacketType != null && CultureInfo.CurrentCulture.CompareInfo.IndexOf(packet.PacketType.ToString(), filterString, CompareOptions.IgnoreCase) >= 0
+                || packet.PacketEnd != null && CultureInfo.CurrentCulture.CompareInfo.IndexOf(packet.PacketEnd, filterString, CompareOptions.IgnoreCase) >= 0
+                || packet.Time != null && CultureInfo.CurrentCulture.CompareInfo.IndexOf(packet.Time.ToString("MM/dd/yyyy HH:mm:ss.fff"), filterString, CompareOptions.IgnoreCase) >= 0;
         }
 
         //Constructor
         public DetailsTab(int portNr)
         {
             InitializeComponent();
+            
             PopulateOverview(portNr);
             DataGridCollection = CollectionViewSource.GetDefaultView(App.RecordingData[portNr].ListOfPackets);
             DataGridCollection.Filter = Filter;

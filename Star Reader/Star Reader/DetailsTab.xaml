@@ -9,14 +9,14 @@
    
         mc:Ignorable="d"
          Height="720" Width="1280">
-    
+
     <!--strat grids-->
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-            
+
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
@@ -28,7 +28,7 @@
 
         <ScrollViewer BorderThickness="25" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2">
             <!--Change this rowspan to update left side-->
-                <WrapPanel Name="PacketViewerA" />
+            <WrapPanel Name="PacketViewerA" />
         </ScrollViewer>
         <Grid Grid.Row="0" Grid.RowSpan="6" Grid.Column="1">
             <!--Change this rowspan to update right side-->
@@ -36,7 +36,7 @@
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-                
+
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="*" />
@@ -47,26 +47,32 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Label Grid.Row="0" Grid.Column="0">Search(Error Type, Content, Time)</Label>
-            <TextBox Grid.Row="0" Grid.Column="1" x:Name="TextBox" Text="{Binding FilterString, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-            <DataGrid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="7" Margin="0,0,0,10" AutoGenerateColumns="True"
-                      Name="DetailedViewerA" ColumnWidth="*" ItemsSource="{Binding DataGridCollection}" IsReadOnly="True" SelectionMode="Single">
+            <Label FontSize="16" Grid.Row="0" Grid.Column="0" FontWeight="Bold">Search</Label>
+            <TextBox Grid.Row="0" Grid.Column="1" x:Name="TextBox" Text="{Binding FilterString, UpdateSourceTrigger=PropertyChanged, Delay=300}" BorderThickness="2" BorderBrush="Black" FontSize="20"></TextBox>
+            <DataGrid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="7" Margin="0,0,0,10" AutoGenerateColumns="False" ItemsSource="{Binding DataGridCollection}"
+                      Name="DetailedViewerA" ColumnWidth="*" SelectionMode="Single">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Time" Binding="{Binding Time, StringFormat='MM/dd/yyyy HH:mm:ss.fff'}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Payload" Binding="{Binding Payload}" Width="2.5*"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Packet Type" Binding="{Binding PacketType}" Width="0.7*"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Error Type" Binding="{Binding ErrorType}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Packet End" Binding="{Binding PacketEnd}" Width="0.7*"></DataGridTextColumn>
+                </DataGrid.Columns>
                 <DataGrid.CellStyle>
-                    
                     <Style TargetType="DataGridCell">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding ErrorType}" Value="Disconnect">
                                 <Setter Property="Background" Value="#ff3333"/>
                             </DataTrigger>
-                                
+
                             <DataTrigger Binding="{Binding ErrorType}" Value="Parity">
                                 <Setter Property="Background" Value="Yellow"/>
                             </DataTrigger>
-                                
+
                             <DataTrigger Binding="{Binding PacketEnd}" Value="EOP">
                                 <Setter Property="Background" Value="#00dddd"/>
                             </DataTrigger>
-                                
+
                             <DataTrigger Binding="{Binding PacketEnd}" Value="None">
                                 <Setter Property="Background" Value="#ffaacc"/>
                             </DataTrigger>
@@ -107,7 +113,6 @@
                 <Rectangle ToolTip="Packet not send" Width="15" Height="15" Fill="#ffaacc" Stroke="Black" StrokeThickness="2"></Rectangle>
                 <TextBlock Padding="0,0,5,0" Text="-Packet not send" />
             </StackPanel>
-
         </WrapPanel>
         <Grid Grid.Row="3">
 
@@ -116,8 +121,8 @@
                 <Label  Margin="160,50,0,0">Total number of errors</Label>
                 <Label Margin="170,50,0,0">Total number of data characters</Label>
             </StackPanel>
-            
-                  <lvc:Gauge Grid.Column="0" Uses360Mode="False" From="0" To="{Binding totalNubOfPackets}" Value="{Binding errValue}" 
+
+            <lvc:Gauge Grid.Column="0" Uses360Mode="False" From="0" To="{Binding totalNubOfPackets}" Value="{Binding errValue}" 
                    LabelFormatter="{Binding Formatter}" />
             <lvc:Gauge   Grid.Column="1" Uses360Mode="False" From="0" To="100" Value="{Binding packetValue}" 
                    LabelFormatter="{Binding Formatter}" />
@@ -125,7 +130,7 @@
                    LabelFormatter="{Binding Formatter}" />
         </Grid>
 
-        <lvc:CartesianChart Grid.Row="4" Grid.Column="0">
+        <lvc:CartesianChart Grid.Row="4" Grid.Column="0" Margin="5,0,0,0">
             <lvc:CartesianChart.AxisX>
                 <lvc:Axis Title="Test" LabelFormatter="{Binding Formatter}" Labels="{Binding Labels}"></lvc:Axis>
             </lvc:CartesianChart.AxisX>
