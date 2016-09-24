@@ -23,8 +23,6 @@ namespace Star_Reader
         private ICollectionView dataGridCollection;
         private string filterString;
         public string[] Labels { get; set; }
-        
-
 
 
         public ICollectionView DataGridCollection
@@ -32,7 +30,9 @@ namespace Star_Reader
             get { return dataGridCollection; }
             set { dataGridCollection = value; NotifyPropertyChanged("DataGridCollection"); }
         }
+
         public event PropertyChangedEventHandler PropertyChanged;
+
         private void NotifyPropertyChanged(string property)
         {
             // PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
@@ -280,11 +280,8 @@ namespace Star_Reader
         public Func<double, string> Formatter1 { get; set; }
         public Func<double, string> Formatter2 { get; set; }
 
-
         private void initialiseGauge()
         {
-            
-          
             errValue = gData.ErrorsPresent;
             packetValue = gData.ListOfPackets.Count;
             charValue = gData.getTotalPackets();
@@ -296,8 +293,8 @@ namespace Star_Reader
             Formatter2 = x => x + " ";
 
             DataContext = this;
-
         }
+
         public double errValue { get; set; }
 
         public double packetValue { get; set; }
@@ -316,17 +313,12 @@ namespace Star_Reader
         public void InitialiseTimeStamps()
         {
             //InitialLabel.Margin = new Thickness(0, 0, 0, 0); //Left, top, right, bottom
-
-
-
+            
             //int childrenCount = VisualTreeHelper.GetChildrenCount(TimeStamps);
             //UIElement contain = VisualTreeHelper.GetChild(TimeStamps, childrenCount - 1) as UIElement;
             //UIElement container = VisualTreeHelper.GetParent(contain) as UIElement;
             //Point relativeLocation = contain.TranslatePoint(new Point(0, yPlus), container);
-
-
-
-
+            
             //int childrenCount2 = VisualTreeHelper.GetChildrenCount(TimeStamps);
 
             Button contain2 = VisualTreeHelper.GetChild(PacketViewerA, 0) as Button;
@@ -371,15 +363,13 @@ namespace Star_Reader
                 //Content = width
             };
 
-           // TimeStamps.Children.Add(Lbl1);
+            //TimeStamps.Children.Add(Lbl1);
             //}
             //else
             //{
             //do nothing
             //}
-
-
-
+            
         }//End of InitialiseTimeStamps
 
     }
