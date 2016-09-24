@@ -1,138 +1,162 @@
 ﻿<TabItem IsSelected="True"
-             x:Class="Star_Reader.DetailsTab"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+         x:Class="Star_Reader.DetailsTab"
+         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
        
-   
-        mc:Ignorable="d"
+         mc:Ignorable="d"
          Height="720" Width="1280">
 
-    <!--strat grids-->
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="0.6*" />
-            <RowDefinition Height="auto" />
-        </Grid.RowDefinitions>
-
-        <ScrollViewer BorderThickness="25" Grid.Row="0" Grid.Column="0">
-            <!--Change this rowspan to update left side-->
-            <WrapPanel Name="PacketViewerA" />
-        </ScrollViewer>
-        <Grid Grid.Row="0" Grid.RowSpan="4" Grid.Column="1">
-            <!--Change this rowspan to update right side-->
+        <!--start grids-->
+        <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
-                <RowDefinition Height="auto" />
                 <RowDefinition Height="*" />
-                <RowDefinition Height="0.24*" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="0.6*" />
+                <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
-            <Label FontSize="16" Grid.Row="0" Grid.Column="0" FontWeight="Bold">Search</Label>
-            <TextBox Grid.Row="0" Grid.Column="1" x:Name="TextBox" Text="{Binding FilterString, UpdateSourceTrigger=PropertyChanged, Delay=300}" BorderThickness="2" BorderBrush="Black" FontSize="20"></TextBox>
-            <DataGrid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"  Margin="0,0,0,10" AutoGenerateColumns="False" ItemsSource="{Binding DataGridCollection}"
-                      Name="DetailedViewerA" ColumnWidth="*" SelectionMode="Extended" IsReadOnly="True">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Time" Binding="{Binding Time, StringFormat='MM/dd/yyyy HH:mm:ss.fff'}"></DataGridTextColumn>
-                    <DataGridTextColumn Header="Payload" Binding="{Binding Payload}" Width="2.5*"></DataGridTextColumn>
-                    <DataGridTextColumn Header="Packet Type" Binding="{Binding PacketType}" Width="0.7*"></DataGridTextColumn>
-                    <DataGridTextColumn Header="Error Type" Binding="{Binding ErrorType}"></DataGridTextColumn>
-                    <DataGridTextColumn Header="Packet End" Binding="{Binding PacketEnd}" Width="0.7*"></DataGridTextColumn>
-                </DataGrid.Columns>
-                <DataGrid.CellStyle>
-                    <Style TargetType="DataGridCell">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding ErrorType}" Value="Disconnect">
-                                <Setter Property="Background" Value="#ff3333"/>
-                            </DataTrigger>
 
-                            <DataTrigger Binding="{Binding ErrorType}" Value="Parity">
-                                <Setter Property="Background" Value="Yellow"/>
-                            </DataTrigger>
-
-                            <DataTrigger Binding="{Binding PacketEnd}" Value="EOP">
-                                <Setter Property="Background" Value="#00dddd"/>
-                            </DataTrigger>
-
-                            <DataTrigger Binding="{Binding PacketEnd}" Value="None">
-                                <Setter Property="Background" Value="#ffaacc"/>
-                            </DataTrigger>
-
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="BorderBrush" Value="Blue" />
-                                <Setter Property="BorderThickness" Value="2" />
-                                <Setter Property="Background" Value="WhiteSmoke"/>
-                                <Setter Property="Foreground" Value="Black"/>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </DataGrid.CellStyle>
-            </DataGrid>
-            <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,0,10">
+            <ScrollViewer BorderThickness="25" Grid.Row="0" Grid.Column="0">
+                <!--Change this rowspan to update left side-->
+                <WrapPanel Name="PacketViewerA" />
+            </ScrollViewer>
+            
+            <!--Data Grid (right side)-->
+            <Grid Grid.Row="0" Grid.RowSpan="4" Grid.Column="1">
+                <!--Change this rowspan to update right side-->
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <lvc:Gauge Grid.Column="0" Uses360Mode="False" From="0" To="{Binding totalNubOfPackets}" Value="{Binding errValue}" 
-                   LabelFormatter="{Binding Formatter}" />
-                <lvc:Gauge   Grid.Column="1" Uses360Mode="False" From="0" To="100" Value="{Binding packetValue}" 
-                   LabelFormatter="{Binding Formatter1}" />
-                <lvc:Gauge   Grid.Column="2" Uses360Mode="False" From="0" To="100" Value="{Binding charValue}" 
-                   LabelFormatter="{Binding Formatter2}" />
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="0.24*" />
+                </Grid.RowDefinitions>
+                
+                <Label FontSize="16" Grid.Row="0" Grid.Column="0" FontWeight="Bold">Search</Label>
+                <TextBox Grid.Row="0" Grid.Column="1" x:Name="TextBox" Text="{Binding FilterString, UpdateSourceTrigger=PropertyChanged, Delay=300}" BorderThickness="2" BorderBrush="Black" FontSize="20"></TextBox>
+
+                <!--data grid start-->
+                <DataGrid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"  Margin="0,0,0,10" AutoGenerateColumns="False" ItemsSource="{Binding DataGridCollection}"
+                          Name="DetailedViewerA" ColumnWidth="*" SelectionMode="Extended" IsReadOnly="True">
+                    
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Time" Binding="{Binding Time, StringFormat='MM/dd/yyyy HH:mm:ss.fff'}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Payload" Binding="{Binding Payload}" Width="2.5*"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Packet Type" Binding="{Binding PacketType}" Width="0.7*"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Error Type" Binding="{Binding ErrorType}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Packet End" Binding="{Binding PacketEnd}" Width="0.7*"></DataGridTextColumn>
+                    </DataGrid.Columns>
+                    
+                    <DataGrid.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ErrorType}" Value="Disconnect">
+                                    <Setter Property="Background" Value="#ff3333"/>
+                                </DataTrigger>
+
+                                <DataTrigger Binding="{Binding ErrorType}" Value="Parity">
+                                    <Setter Property="Background" Value="Yellow"/>
+                                </DataTrigger>
+
+                                <DataTrigger Binding="{Binding PacketEnd}" Value="EOP">
+                                    <Setter Property="Background" Value="#00dddd"/>
+                                </DataTrigger>
+
+                                <DataTrigger Binding="{Binding PacketEnd}" Value="None">
+                                    <Setter Property="Background" Value="#ffaacc"/>
+                                </DataTrigger>
+
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="BorderBrush" Value="Blue" />
+                                    <Setter Property="BorderThickness" Value="2" />
+                                    <Setter Property="Background" Value="WhiteSmoke"/>
+                                    <Setter Property="Foreground" Value="Black"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.CellStyle>
+                </DataGrid>
+                <!--data grid end-->
+
+                <!--Gauge start (bottom right)-->
+                <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,0,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <lvc:Gauge Grid.Column="0" Uses360Mode="False" From="0" To="{Binding totalNubOfPackets}" Value="{Binding errValue}" 
+                               LabelFormatter="{Binding Formatter}" />
+                    <lvc:Gauge Grid.Column="1" Uses360Mode="False" From="0" To="100" Value="{Binding packetValue}" 
+                               LabelFormatter="{Binding Formatter1}" />
+                    <lvc:Gauge Grid.Column="2" Uses360Mode="False" From="0" To="100" Value="{Binding charValue}" 
+                               LabelFormatter="{Binding Formatter2}" />
+                </Grid>
+                <!--Gauge end-->
 
             </Grid>
+            
+            <!--packet description boxes start (under overview)-->
+            <WrapPanel Grid.Row="1" Grid.Column="0" Margin="5,5,5,5">
+                
+                <StackPanel Orientation="Horizontal">
+                    <Rectangle ToolTip="Valid packet" Width="15" Height="15" Fill="#00dddd" Stroke="Black" StrokeThickness="2"></Rectangle>
+                    <TextBlock Padding="0,0,5,0" Text="-Valid packet"/>
+                </StackPanel>
+                
+                <StackPanel Orientation="Horizontal">
+                    <Rectangle  ToolTip="Empty space" Width="15" Height="15" Fill="White" Stroke="Black" StrokeThickness="2"></Rectangle>
+                    <TextBlock  Padding="0,0,5,0" Text="-Empty space"/>
+                </StackPanel>
+                
+                <StackPanel Orientation="Horizontal">
+                    <Rectangle ToolTip="Empty space over 1 second" Width="15" Height="15" Fill="#ffe699" Stroke="Black" StrokeThickness="2"></Rectangle>
+                    <TextBlock  Padding="0,0,5,0" Text="-Empty space over 1 second"/>
+                </StackPanel>
+                
+                <StackPanel Orientation="Horizontal" >
+                    <Rectangle  ToolTip="Disconnect error" Width="15" Height="15" Fill="#ff3333" Stroke="Black" StrokeThickness="2"></Rectangle>
+                    <TextBlock Padding="0,0,5,0" Text="-Disconnect error" />
+                </StackPanel>
+                
+                <StackPanel Orientation="Horizontal">
+                    <Rectangle ToolTip="Parity error" Width="15" Height="15" Fill="Yellow" Stroke="Black" StrokeThickness="2"></Rectangle>
+                    <TextBlock Padding="0,0,5,0" Text="-Parity error"/>
+                </StackPanel>
+                
+                <StackPanel Orientation="Horizontal">
+                    <Rectangle ToolTip="Packet not send" Width="15" Height="15" Fill="#ffaacc" Stroke="Black" StrokeThickness="2"></Rectangle>
+                    <TextBlock Padding="0,0,5,0" Text="-Packet not send" />
+                </StackPanel>
+                
+            </WrapPanel>
+            <!--packet description boxes end-->
+            
+            <!--Chart start (bottom left)-->
+            <lvc:CartesianChart Grid.Row="2"  Grid.Column="0" Margin="5,0,0,0">
+                <lvc:CartesianChart.AxisX>
+                    <lvc:Axis Title="Test" LabelFormatter="{Binding Formatter}" Labels="{Binding Labels}"></lvc:Axis>
+                </lvc:CartesianChart.AxisX>
+                <lvc:CartesianChart Series="{Binding SeriesCollection}" LegendLocation="Right"/>
+            </lvc:CartesianChart>
+            <!--Chart end-->
 
+            <!--Radio buttons start (bottom left, under chart)-->
+            <WrapPanel Grid.Column="0" Grid.Row="3" Margin="5,5,5,10">
+                <RadioButton x:Name="DataRate" Content="DataRate bytes per min" HorizontalAlignment="Left" VerticalAlignment="bottom" Checked="DataRate_Checked" Unchecked="DataRate_Unchecked"/>
+                <RadioButton Margin="10,0,0,0" x:Name="Errors" Content="Errors" HorizontalAlignment="Left" VerticalAlignment="bottom" Checked="Errors_Checked" Unchecked="Errors_Unchecked"/>
+            </WrapPanel>
+            <!--Radio buttons end-->
         </Grid>
-        <WrapPanel Grid.Row="1" Grid.Column="0" Margin="5,5,5,5">
-            <StackPanel Orientation="Horizontal">
-                <Rectangle ToolTip="Valid packet" Width="15" Height="15" Fill="#00dddd" Stroke="Black" StrokeThickness="2"></Rectangle>
-                <TextBlock Padding="0,0,5,0" Text="-Valid packet"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <Rectangle  ToolTip="Empty space" Width="15" Height="15" Fill="White" Stroke="Black" StrokeThickness="2"></Rectangle>
-                <TextBlock  Padding="0,0,5,0" Text="-Empty space"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <Rectangle ToolTip="Empty space over 1 second" Width="15" Height="15" Fill="#ffe699" Stroke="Black" StrokeThickness="2"></Rectangle>
-                <TextBlock  Padding="0,0,5,0" Text="-Empty space over 1 second"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" >
-                <Rectangle  ToolTip="Disconnect error" Width="15" Height="15" Fill="#ff3333" Stroke="Black" StrokeThickness="2"></Rectangle>
-                <TextBlock Padding="0,0,5,0" Text="-Disconnect error" />
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <Rectangle ToolTip="Parity error" Width="15" Height="15" Fill="Yellow" Stroke="Black" StrokeThickness="2"></Rectangle>
-                <TextBlock Padding="0,0,5,0" Text="-Parity error"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <Rectangle ToolTip="Packet not send" Width="15" Height="15" Fill="#ffaacc" Stroke="Black" StrokeThickness="2"></Rectangle>
-                <TextBlock Padding="0,0,5,0" Text="-Packet not send" />
-            </StackPanel>
-        </WrapPanel>
-        <lvc:CartesianChart Grid.Row="2"  Grid.Column="0" Margin="5,0,0,0">
-            <lvc:CartesianChart.AxisX>
-                <lvc:Axis Title="Test" LabelFormatter="{Binding Formatter}" Labels="{Binding Labels}"></lvc:Axis>
-            </lvc:CartesianChart.AxisX>
-            <lvc:CartesianChart Series="{Binding SeriesCollection}" LegendLocation="Right"/>
-        </lvc:CartesianChart>
-
-        <WrapPanel Grid.Column="0" Grid.Row="3" Margin="5,5,5,10">
-            <RadioButton x:Name="DataRate" Content="DataRate bytes per min" HorizontalAlignment="Left" VerticalAlignment="bottom" Checked="DataRate_Checked" Unchecked="DataRate_Unchecked"/>
-            <RadioButton Margin="10,0,0,0" x:Name="Errors" Content="Errors" HorizontalAlignment="Left" VerticalAlignment="bottom" Checked="Errors_Checked" Unchecked="Errors_Unchecked"/>
-        </WrapPanel>
-    </Grid>
 </TabItem>
