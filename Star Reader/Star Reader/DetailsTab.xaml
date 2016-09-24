@@ -25,7 +25,13 @@
 
             <ScrollViewer BorderThickness="25" Grid.Row="0" Grid.Column="0">
                 <!--Change this rowspan to update left side-->
-                <WrapPanel Name="PacketViewerA" />
+                <DockPanel>
+                    <StackPanel Name="TimeStamps">
+                        <!--<Label Content="00:00:00.000" FontSize="9" Height="0" /> -->
+                        <!--Above is for testing purposes only-->
+                    </StackPanel>
+                    <WrapPanel Name="PacketViewerA" />
+                </DockPanel>
             </ScrollViewer>
             
             <!--Data Grid (right side)-->

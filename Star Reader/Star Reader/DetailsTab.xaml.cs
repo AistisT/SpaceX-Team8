@@ -82,8 +82,6 @@ namespace Star_Reader
             DataGridCollection.Filter = Filter;
             InitialiseTimeStamps();
             initialiseGauge();
-
-
         }
 
         //generating the button in the overview
@@ -363,7 +361,8 @@ namespace Star_Reader
                 //Content = width
             };
 
-            //TimeStamps.Children.Add(Lbl1);
+            TimeStamps.Children.Add(Lbl1);
+
             //}
             //else
             //{
