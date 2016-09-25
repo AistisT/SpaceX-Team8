@@ -320,6 +320,7 @@ namespace Star_Reader
             //int childrenCount2 = VisualTreeHelper.GetChildrenCount(TimeStamps);
 
             Button contain2 = VisualTreeHelper.GetChild(PacketViewerA, 0) as Button;
+            //Button contain3 = VisualTreeHelper.GetChild(PacketViewerA, 1) as Button;
             //UIElement container2 = VisualTreeHelper.GetParent(contain2) as UIElement;
             //Point relativeLocation = contain2.TranslatePoint(new Point(0, yPlus), container2);
             //var relativeLocation2 = contain2.TransformToAncestor(this);
@@ -349,6 +350,10 @@ namespace Star_Reader
             //double width = PacketViewerA.ActualWidth;
             //double width = blah.ActualWidth;
 
+            //Point relativePoint = contain3.TransformToVisual(contain2).Transform(new Point(0, 0));
+
+            //Point position = contain2.PointToScreen(new Point(0d, 0d));
+
             string str2 = null;
             str2 = contain2.ToolTip as string;
 
@@ -358,7 +363,7 @@ namespace Star_Reader
                 FontSize = 9,
                 //Content = contain2.ToolTip
                 Content = str2.Substring(11, 12)
-                //Content = width
+                //Content = position
             };
 
             TimeStamps.Children.Add(Lbl1);
