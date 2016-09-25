@@ -69,7 +69,7 @@
                         <Style TargetType="DataGridCell">
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding ErrorType}" Value="Disconnect">
-                                    <Setter Property="Background" Value="#ff3333"/>
+                                    <Setter Property="Background" Value="#ff3333"/> <!--Red-->
                                 </DataTrigger>
 
                                 <DataTrigger Binding="{Binding ErrorType}" Value="Parity">
@@ -77,11 +77,11 @@
                                 </DataTrigger>
 
                                 <DataTrigger Binding="{Binding PacketEnd}" Value="EOP">
-                                    <Setter Property="Background" Value="#00dddd"/>
+                                    <Setter Property="Background" Value="#00dddd"/> <!--Blue-->
                                 </DataTrigger>
 
                                 <DataTrigger Binding="{Binding PacketEnd}" Value="None">
-                                    <Setter Property="Background" Value="#ffaacc"/>
+                                    <Setter Property="Background" Value="#ffaacc"/> <!--Pink-->
                                 </DataTrigger>
 
                                 <Trigger Property="IsSelected" Value="True">

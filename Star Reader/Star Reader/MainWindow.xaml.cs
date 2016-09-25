@@ -30,6 +30,7 @@ namespace Star_Reader
             InitializeComponent();
         }
 
+        //On click method for upload file button
         private void UploadFileButton_OnClick(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog
@@ -38,6 +39,7 @@ namespace Star_Reader
                 Filter = "Rec files (*.rec)|*.rec|Text files (*.txt)|*.txt",
                 InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyComputer)
             };
+
             if (openFileDialog.ShowDialog() == true)
             {
                 FileReader fr = new FileReader();
@@ -63,9 +65,19 @@ namespace Star_Reader
                 }
             }
         }
+
+        //On click method for exit button
         private void btnExitProgram_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        //On click method for about button
+        private void aboutButton_OnClick(object sender, EventArgs e)
+        {
+            //http://stackoverflow.com/questions/5851833/c-sharp-wpf-child-window-about-window
+            AboutWindow aboutWindow = new AboutWindow();
+            aboutWindow.ShowDialog();
         }
     }
 }

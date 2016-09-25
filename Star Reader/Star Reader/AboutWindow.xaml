@@ -1,0 +1,147 @@
+﻿<Window x:Class="Star_Reader.Model.AboutWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Star_Reader.Model"
+        mc:Ignorable="d"
+        
+        Title="About Page" Height="650" Width="800">
+
+    <Grid>
+        <ScrollViewer>
+            <StackPanel>
+                <!--Margin = Left, Top, Right, Bottom-->
+                <!--Title for whole page-->
+                <TextBlock HorizontalAlignment="Center"
+                           Margin="0,10,0,5" 
+		                   TextWrapping="Wrap"
+                           FontWeight="Bold"
+                           TextDecorations="underline"
+                           Text="About The Star Reader"
+		                   Padding="10" 
+                           FontSize="24" />
+
+                <!--Heading for Introduction-->
+                <TextBlock HorizontalAlignment="Left"
+                           FontSize="16"
+                           FontWeight="Bold"
+                           Margin="20,10,20,0">
+                    Introduction
+                </TextBlock>
+            
+                <!--Text for Introduction-->
+                <TextBlock HorizontalAlignment="Left"
+                           TextWrapping="Wrap"
+                           FontSize="12"
+                           Margin="20,10,20,10">
+                    The Star Reader is a program designed and created for STAR-Dundee by Team 8 (Team members: Euan Berry, Aistis Taraskevicius, Alan Huntington, Ross Marshall, Yulian Vasilev, Suzanne Buchanan and Qing Yuan Cao.) of the AC41004 module of The University of Dundee.
+                </TextBlock>
+
+                <!--Heading for How to get Started-->
+                <TextBlock HorizontalAlignment="Left"
+                           FontSize="16"
+                           FontWeight="Bold"
+                           Margin="20,10,20,0">
+                    How To Get Started
+                </TextBlock>
+
+                <!--Text for how to get started-->
+                <TextBlock HorizontalAlignment="Left"
+                           TextWrapping="Wrap"
+                           FontSize="12"
+                           Margin="20,10,20,10">
+                    To begin, you need to load the file that you wish to read in. Go to File -> Open then select the file you wish to view. A new tab will open containing a detailed breakdown of the file.
+                </TextBlock>
+
+                <!--Heading for Overview-->
+                <TextBlock HorizontalAlignment="Left"
+                           FontSize="16"
+                           FontWeight="Bold"
+                           Margin="20,10,20,0">
+                    About The Overview
+                </TextBlock>
+
+                <!--Text for Overview-->
+                <TextBlock HorizontalAlignment="Left"
+                           TextWrapping="Wrap"
+                           FontSize="12"
+                           Margin="20,10,20,10">
+                    The Overview is the top leftmost window. It contains on overview of all the packets that were read in. Packets can be clicked and the packet will be highlighted in the data chart to the right. The colour of the squares each have a different meaning. <LineBreak/><LineBreak/>
+                    Blue: A packet. <LineBreak/>
+                    Pink: The packet containing an error. <LineBreak/>
+                    Yellow: Parsing error. <LineBreak/>
+                    Red: Disconect. <LineBreak/>
+                    Orange: EEP error. <LineBreak/>
+                    White: Empty space. <LineBreak/>
+                    Beige: Empty space of over 1 second. <LineBreak/><LineBreak/>
+                    Underneath the overview there is a reminder of what each coloured square means.
+                </TextBlock>
+
+                <!--Heading for Graph-->
+                <TextBlock HorizontalAlignment="Left"
+                           FontSize="16"
+                           FontWeight="Bold"
+                           Margin="20,10,20,0">
+                    About The Graph
+                </TextBlock>
+
+                <!--Text for Graph-->
+                <TextBlock HorizontalAlignment="Left"
+                           TextWrapping="Wrap"
+                           FontSize="12"
+                           Margin="20,10,20,10">
+                    The graph is positioned in the bottem left corner. It gives an overview of the datarate and the errors within the file.
+                </TextBlock>
+
+                <!--Heading for Search Box-->
+                <TextBlock HorizontalAlignment="Left"
+                           FontSize="16"
+                           FontWeight="Bold"
+                           Margin="20,10,20,0">
+                    About The Search Bar
+                </TextBlock>
+
+                <!--Text for Search Box-->
+                <TextBlock HorizontalAlignment="Left"
+                           TextWrapping="Wrap"
+                           FontSize="12"
+                           Margin="20,10,20,10">
+                    The search bar, top right corner, can be used to search through the data (shown in the data chart). You can search by Data Content, Error or Time. 
+                </TextBlock>
+
+                <!--Heading for Data Chart-->
+                <TextBlock HorizontalAlignment="Left"
+                           FontSize="16"
+                           FontWeight="Bold"
+                           Margin="20,10,20,0">
+                    About The Data Chart
+                </TextBlock>
+
+                <!--Text for Data Chart-->
+                <TextBlock HorizontalAlignment="Left"
+                           TextWrapping="Wrap"
+                           FontSize="12"
+                           Margin="20,10,20,10">
+                    The data chart, just below the search bar, shows a more detailed view of the data that was read in from the file. It shows the data and time, content, packet type, error type (if any) and the packet end.
+                </TextBlock>
+
+                <!--Heading for Gauges-->
+                <TextBlock HorizontalAlignment="Left"
+                           FontSize="16"
+                           FontWeight="Bold"
+                           Margin="20,10,20,0">
+                    About The Gauges
+                </TextBlock>
+
+                <!--Text for Gauges-->
+                <TextBlock HorizontalAlignment="Left"
+                           TextWrapping="Wrap"
+                           FontSize="12"
+                           Margin="20,10,20,10">
+                    The gauges that are in the bottom right, under the data chart, show (from left to right) the number of errors, the number of packets, and the total number of data characters.
+                </TextBlock>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Window>

@@ -8,10 +8,13 @@
         xmlns:system="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:Star_Reader"
         mc:Ignorable="d"
+        
         Title="Space Wire Reader" Height="720" Width="1280" WindowState="Maximized">
+    
     <Window.Resources>
         <system:String x:Key="Partition">QuickStart</system:String>
     </Window.Resources>
+    
     <dockablz:Layout Partition="{StaticResource Partition}" >
         <Grid>
             <DockPanel>
@@ -21,17 +24,19 @@
                         <Separator />
                         <MenuItem Header="_Exit" Click ="btnExitProgram_Click "  />
                     </MenuItem>
-                    <MenuItem Header="About" Height="20" Width="60">
-                    </MenuItem>
+
+                    <MenuItem Header="About" Height="20" Width="60" Click ="aboutButton_OnClick"/>
                 </Menu>
+                
                 <TextBox AcceptsReturn="True" />
             </DockPanel>
+            
             <dragablz:TabablzControl Margin="0,20,0,0" ConsolidateOrphanedItems="True" Name="TabControl" ShowDefaultCloseButton="True" >
                 <dragablz:TabablzControl.InterTabController >
                     <dragablz:InterTabController Partition="{StaticResource Partition}" />
                 </dragablz:TabablzControl.InterTabController>
-                <TabItem Header="Statistics" >
-                </TabItem>
+
+                <TabItem Header="Statistics" />
             </dragablz:TabablzControl>
         </Grid>
     </dockablz:Layout>
