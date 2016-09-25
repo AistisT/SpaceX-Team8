@@ -44,9 +44,10 @@ namespace Star_Reader.Model
             if (isRMAP(Payload))
             {
                 int dataLength = findDataLength(Payload);
+                int headerstart = findStartOfRMAP(Payload);
                 if (dataLength == 0)
                 {
-                    byte payloadcrc = ComputeChecksum(createByteArray(Payload));
+                    byte payloadcrc = ComputeChecksum(createByteArray(Payload.Substring(headerstart)));
                     if (payloadcrc != 0)
                     {
                         ErrorType = "Header Only CRC Error";
@@ -56,7 +57,6 @@ namespace Star_Reader.Model
                 //if (dataLength>0)
                 {
                     int datapart = ((dataLength + 1) * 3);
-                    int headerstart = findStartOfRMAP(Payload);
                     byte headercrc = ComputeChecksum(createByteArray(Payload.Substring(headerstart, Payload.Length - datapart - headerstart)));
                     byte datacrc = ComputeChecksum(createByteArray(Payload.Substring(Payload.Length - datapart)));
                     if (headercrc != 0)
