@@ -7,6 +7,7 @@ namespace Star_Reader.Model
     public class FileReader
     {
 
+        //constructor
         public FileReader()
         {
 
@@ -50,6 +51,6 @@ namespace Star_Reader.Model
                 }
             }
             return r;
-        }
+        }//end StoreRecording
     }
 }

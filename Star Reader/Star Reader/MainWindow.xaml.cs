@@ -26,6 +26,7 @@ namespace Star_Reader
             TabControl.AddToSource(statisticsTab);
         }
 
+        //On click method for upload file button
         private void UploadFileButton_OnClick(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog
@@ -61,13 +62,18 @@ namespace Star_Reader
             }
         }
 
+        //On click method for exit button
         private void btnExitProgram_Click(object sender, EventArgs e)
         {
             Close();
         }
-        void DetailsTab_Closing(object sencer, CancelEventArgs e)
+
+        //On click method for about button
+        private void aboutButton_OnClick(object sender, EventArgs e)
         {
-            Debug.WriteLine("Closing");
+            //http://stackoverflow.com/questions/5851833/c-sharp-wpf-child-window-about-window
+            AboutWindow aboutWindow = new AboutWindow();
+            aboutWindow.ShowDialog();
         }
     }
 }

@@ -30,6 +30,7 @@ namespace Star_Reader.Model
             }
             
         }
+
         public List<double>  getDataRates()
         {
             int timeInterval = 60;
