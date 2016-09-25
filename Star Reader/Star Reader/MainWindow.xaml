@@ -18,6 +18,7 @@
     <dockablz:Layout Partition="{StaticResource Partition}" >
         <Grid>
             <DockPanel>
+                <!--menu for the top buttons-->
                 <Menu DockPanel.Dock="Top" Height="20">
                     <MenuItem Header="_File" Width="60" >
                         <MenuItem Header="_Open"  Click="UploadFileButton_OnClick"/>

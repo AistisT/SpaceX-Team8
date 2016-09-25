@@ -19,6 +19,7 @@ namespace Star_Reader.Model
     /// </summary>
     public partial class AboutWindow : Window
     {
+        //constructor
         public AboutWindow()
         {
             InitializeComponent();

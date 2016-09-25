@@ -65,10 +65,8 @@ namespace Star_Reader.Model
                 }
             }
             return plot;
-        }
-
-
-
+        }//end getPlots
+        
         public List<double> getBars(Recording r)
         {
             List<double> barsDcPaEeEr = new List<double>();
@@ -131,6 +129,6 @@ namespace Star_Reader.Model
             barsDcPaEeEr.Add(Errors);
             return barsDcPaEeEr;
 
-        }
+        }//end getBars
     }
 }

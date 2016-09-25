@@ -25,6 +25,7 @@ namespace Star_Reader
     /// </summary>
     public partial class MainWindow : Window
     {
+        //constructor
         public MainWindow()
         {
             InitializeComponent();
