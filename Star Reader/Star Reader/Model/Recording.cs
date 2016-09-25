@@ -42,7 +42,7 @@ namespace Star_Reader.Model
             {
                 DataStartPoint = DataStartPoint.AddSeconds(timeInterval);
                 DataEndPoint = DataEndPoint.AddSeconds(timeInterval);
-                Console.WriteLine(i);
+                //Console.WriteLine(i);
                 int packets = 0;
                 for(int j=0;j<ListOfPackets.Count;j++)
                 {
@@ -56,6 +56,10 @@ namespace Star_Reader.Model
             return datarate;
         }
 
+        /// <summary>
+        /// Returns the total number of bytes contained in the recording. Calculated by each packet stored in the list
+        /// </summary>
+        /// <returns></returns>
         public int getTotalPackets()
         {
             int rate = 0;
@@ -65,7 +69,11 @@ namespace Star_Reader.Model
             }
             return rate;
         }
-        //can be used to show the time the recording takes. Use .TotalSeconds or .TotalMinutes
+
+        /// <summary>
+        /// Returns the total time the recording takes. Use .TotalSeconds or .TotalMinutes to use it.
+        /// </summary>
+        /// <returns></returns>
         public TimeSpan getDurationOfRecording()
         {
             return PacketEndTime.Subtract(PacketStartTime);
