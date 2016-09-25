@@ -60,7 +60,7 @@ namespace Star_Reader.Model
         /// Returns the total number of bytes contained in the recording. Calculated by each packet stored in the list
         /// </summary>
         /// <returns></returns>
-        public int getTotalPackets()
+        public int GetNumberOfCharacters()
         {
             int rate = 0;
             for(int i=0;i<ListOfPackets.Count;i++)

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Star_Reader.Model
 {
 
-    class Graphing
+    public class Graphing
     {
 
         public List<double> getPlots(Recording r)

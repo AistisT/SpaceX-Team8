@@ -1,0 +1,39 @@
+﻿<TabItem  Header="Statistics" IsSelected="True"
+         x:Class="Star_Reader.StatisticsTab"
+         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+         xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz"
+         xmlns:dockablz="clr-namespace:Dragablz.Dockablz;assembly=Dragablz"
+         mc:Ignorable="d"
+         Height="720" Width="1280">
+
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <!--Gauge start (bottom right)-->
+        <Grid Grid.Row="0" Grid.Column="0">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <lvc:Gauge Grid.Column="0" Uses360Mode="False" From="0" To="{Binding NrOfPackets}" Value="{Binding NrOfErrors}" />
+            <lvc:Gauge Grid.Column="1" Uses360Mode="False" From="0" To="{Binding NrOfCharacters}" Value="{Binding NrOfPackets}" />
+            <lvc:Gauge Grid.Column="2" Uses360Mode="False" From="0" To="100" Value="{Binding NrOfCharacters}" />
+        </Grid>
+        <!--Gauge end-->
+    </Grid>
+
+</TabItem>

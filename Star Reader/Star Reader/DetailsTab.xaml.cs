@@ -9,6 +9,7 @@ using System.ComponentModel;
 using System.Globalization;
 using LiveCharts.Wpf;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Windows.Input;
 
 namespace Star_Reader
@@ -68,10 +69,13 @@ namespace Star_Reader
             if (string.IsNullOrEmpty(filterString)) return true;
             return packet.ErrorType != null && CultureInfo.CurrentCulture.CompareInfo.IndexOf(packet.ErrorType, filterString, CompareOptions.IgnoreCase) >= 0
                 || packet.Payload != null && CultureInfo.CurrentCulture.CompareInfo.IndexOf(packet.Payload, filterString, CompareOptions.IgnoreCase) >= 0
-                || packet.PacketType != null && CultureInfo.CurrentCulture.CompareInfo.IndexOf(packet.PacketType.ToString(), filterString, CompareOptions.IgnoreCase) >= 0
+                || CultureInfo.CurrentCulture.CompareInfo.IndexOf(packet.PacketType.ToString(), filterString, CompareOptions.IgnoreCase) >= 0
                 || packet.PacketEnd != null && CultureInfo.CurrentCulture.CompareInfo.IndexOf(packet.PacketEnd, filterString, CompareOptions.IgnoreCase) >= 0
-                || packet.Time != null && CultureInfo.CurrentCulture.CompareInfo.IndexOf(packet.Time.ToString("MM/dd/yyyy HH:mm:ss.fff"), filterString, CompareOptions.IgnoreCase) >= 0;
+                || CultureInfo.CurrentCulture.CompareInfo.IndexOf(packet.Time.ToString("MM/dd/yyyy HH:mm:ss.fff"), filterString, CompareOptions.IgnoreCase) >= 0;
         }
+
+
+
 
         //Constructor
         public DetailsTab(int portNr)
@@ -82,6 +86,7 @@ namespace Star_Reader
             DataGridCollection.Filter = Filter;
             InitialiseTimeStamps();
             initialiseGauge();
+            DataContext = this;
         }
 
         //generating the button in the overview
@@ -262,7 +267,6 @@ namespace Star_Reader
             SeriesCollection[2].Values.Add(bars[1]);
             SeriesCollection[3].Values.Add(bars[2]);
             SeriesCollection[4].Values.Add(bars[3]);
-            DataContext = this;
         }
 
         private void Errors_Unchecked(object sender, RoutedEventArgs e)
@@ -282,7 +286,7 @@ namespace Star_Reader
         {
             errValue = gData.ErrorsPresent;
             packetValue = gData.ListOfPackets.Count;
-            charValue = gData.getTotalPackets();
+            charValue = gData.GetNumberOfCharacters();
 
             Formatter = x => x + " ";
 
@@ -290,7 +294,6 @@ namespace Star_Reader
 
             Formatter2 = x => x + " ";
 
-            DataContext = this;
         }
 
         public double errValue { get; set; }

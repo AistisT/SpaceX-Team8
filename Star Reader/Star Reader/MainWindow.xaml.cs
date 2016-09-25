@@ -1,22 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using Dragablz;
 using Microsoft.Win32;
 using Star_Reader.Model;
-using LiveCharts;
 
 namespace Star_Reader
 {
@@ -25,9 +14,16 @@ namespace Star_Reader
     /// </summary>
     public partial class MainWindow : Window
     {
+        private StatisticsTab statisticsTab;
         public MainWindow()
         {
+            DataContext = new MainWindowViewModel();
             InitializeComponent();
+            statisticsTab = new StatisticsTab
+            {
+               Name = "Statistics"
+            };
+            TabControl.AddToSource(statisticsTab);
         }
 
         private void UploadFileButton_OnClick(object sender, RoutedEventArgs e)
@@ -38,35 +34,40 @@ namespace Star_Reader
                 Filter = "Rec files (*.rec)|*.rec|Text files (*.txt)|*.txt",
                 InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyComputer)
             };
-            if (openFileDialog.ShowDialog() == true)
+            if (openFileDialog.ShowDialog() != true) return;
+            FileReader fr = new FileReader();
+            foreach (var file in openFileDialog.FileNames)
             {
-                FileReader fr = new FileReader();
-                foreach (var file in openFileDialog.FileNames)
-                {
-                    Recording r = fr.StoreRecording(file);
-                    var name = "PortTab" + r.Port;
+                Recording r = fr.StoreRecording(file);
+                var name = "PortTab" + r.Port;
 
-                    for (var i = TabControl.Items.Count; i >0 ; i--)
+                for (var i = TabControl.Items.Count; i > 0; i--)
+                {
+                    TabItem item = (TabItem)TabControl.Items[i - 1];
+                    if (item.Name.Equals(name))
                     {
-                        TabItem item = (TabItem)TabControl.Items[i-1];
-                        if (!item.Name.Equals(name)) continue;
                         App.RecordingData.Remove(r.Port);
                         TabControl.Items.Remove(item);
                     }
-                    App.RecordingData.Add(r.Port, r);
-                    DetailsTab tab = new DetailsTab(r.Port)
-                    {
-                        Header = "Port " + r.Port,
-                        Name = name
-                    };
-                    TabControl.AddToSource(tab);
                 }
+                App.RecordingData.Add(r.Port, r);
+                DetailsTab tab = new DetailsTab(r.Port)
+                {
+                    Header = "Port " + r.Port,
+                    Name = name
+                };
+                TabControl.AddToSource(tab);
+                statisticsTab.CalculateDataForGougeCharts();
             }
         }
+
         private void btnExitProgram_Click(object sender, EventArgs e)
         {
             Close();
         }
+        void DetailsTab_Closing(object sencer, CancelEventArgs e)
+        {
+            Debug.WriteLine("Closing");
+        }
     }
 }
-

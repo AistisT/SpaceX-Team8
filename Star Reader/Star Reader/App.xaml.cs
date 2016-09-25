@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Windows;
 using Star_Reader.Model;
 
@@ -9,6 +10,6 @@ namespace Star_Reader
     /// </summary>
     public partial class App : Application
     {
-       public static Dictionary<int,Recording> RecordingData= new Dictionary<int, Recording>();
+        public static Dictionary<int, Recording> RecordingData = new Dictionary<int, Recording>();
     }
 }
