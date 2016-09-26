@@ -29,9 +29,22 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
+            
+            <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Column="0" Margin="0,0,0,150" >
+                <TextBlock FontSize="14" Foreground="Black" FontWeight="Bold" ToolTip="Number of errors" HorizontalAlignment="Center"  VerticalAlignment="Top" Text="Number of errors"/>
+            </DockPanel>
+
+            <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Column="1" Margin="0,0,0,150" >
+                <TextBlock FontSize="14" Foreground="Black" FontWeight="Bold" ToolTip="Number of packets" HorizontalAlignment="Center" VerticalAlignment="Top"  Text="Number of packets"/>
+            </DockPanel>
+
+            <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Column="2" Margin="0,0,0,150" >
+                <TextBlock FontSize="14" Foreground="Black" FontWeight="Bold" ToolTip="Number of data characters" HorizontalAlignment="Center" VerticalAlignment="Top"  Text="Number of data characters"/>
+            </DockPanel>
+           
             <lvc:Gauge Grid.Column="0" Uses360Mode="False" From="0" To="{Binding NrOfPackets}" Value="{Binding NrOfErrors}" />
             <lvc:Gauge Grid.Column="1" Uses360Mode="False" From="0" To="{Binding NrOfCharacters}" Value="{Binding NrOfPackets}" />
-            <lvc:Gauge Grid.Column="2" Uses360Mode="False" From="0" To="100" Value="{Binding NrOfCharacters}" />
+            <lvc:Gauge Grid.Column="2" Uses360Mode="False" From="0" To="{Binding NrOfCharacters}" Value="{Binding NrOfCharacters}" />
         </Grid>
         <!--Gauge end-->
         <!--Chart start (bottom left)-->
