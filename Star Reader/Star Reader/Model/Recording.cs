@@ -24,7 +24,7 @@ namespace Star_Reader.Model
         public void AddPacket(Packet toAdd)
         {
             ListOfPackets.Add(toAdd);
-            if (toAdd.PacketType == 'E')
+            if (toAdd.ErrorType != null)
             {
                 ErrorsPresent++;
             }
