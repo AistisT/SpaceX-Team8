@@ -24,7 +24,7 @@ namespace Star_Reader.Model
         public void AddPacket(Packet toAdd)
         {
             ListOfPackets.Add(toAdd);
-            if (toAdd.PacketType == 'E')
+            if (toAdd.ErrorType != null)
             {
                 ErrorsPresent++;
             }
@@ -78,6 +78,37 @@ namespace Star_Reader.Model
         public TimeSpan getDurationOfRecording()
         {
             return PacketEndTime.Subtract(PacketStartTime);
+        }
+
+        /// <summary>
+        /// Tests the recording for repeating packets being transmitted
+        /// </summary>
+        public void testForBabblingIdiot()
+        {
+            List<int> idiots = new List<int>();
+            for (int i = 4; i < ListOfPackets.Count; i++)
+            {
+                string payload = ListOfPackets[i].Payload;
+                if (payload == ListOfPackets[i - 1].Payload
+                    && payload == ListOfPackets[i - 2].Payload
+                    && payload == ListOfPackets[i - 3].Payload
+                    && payload == ListOfPackets[i - 4].Payload)
+                {
+                    for (int j = (i - 4); j <= i; j++)
+                        if (idiots.Contains(j) == false)
+                        {
+                            idiots.Add(j);
+                        }
+                }
+            }
+            if(idiots.Count!=0)
+            {
+                for(int k=0;k<idiots.Count();k++)
+                {
+                    ListOfPackets[idiots[k]].ErrorType += "Babbling Idiot Detected";
+                    ErrorsPresent++;
+                }
+            }
         }
     }
 }
