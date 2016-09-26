@@ -1,45 +1,48 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Media;
-using Star_Reader.Model;
-using LiveCharts;
-using System.ComponentModel;
-using System.Globalization;
-using LiveCharts.Wpf;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Windows.Input;
+using System.Windows.Media;
+using LiveCharts;
+using LiveCharts.Wpf;
+using Star_Reader.Model;
 
 namespace Star_Reader
 {
     /// <summary>
-    /// Interaction logic for RecordedData.xaml
+    ///     Interaction logic for RecordedData.xaml
     /// </summary>
     public partial class DetailsTab : TabItem, INotifyPropertyChanged
     {
-        private Recording gData;
-
         private ICollectionView dataGridCollection;
         private string filterString;
+        private Recording gData;
+
+        //Constructor
+        public DetailsTab(int portNr)
+        {
+            InitializeComponent();
+            PopulateOverview(portNr);
+            DataGridCollection = CollectionViewSource.GetDefaultView(App.RecordingData[portNr].ListOfPackets);
+            DataGridCollection.Filter = Filter;
+            InitialiseTimeStamps();
+            initialiseGauge();
+            DataContext = this;
+        }
+
         public string[] Labels { get; set; }
 
 
         public ICollectionView DataGridCollection
         {
             get { return dataGridCollection; }
-            set { dataGridCollection = value; NotifyPropertyChanged("DataGridCollection"); }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void NotifyPropertyChanged(string property)
-        {
-            // PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
-            if (PropertyChanged != null)
+            set
             {
-                PropertyChanged(this, new PropertyChangedEventArgs(property));
+                dataGridCollection = value;
+                NotifyPropertyChanged("DataGridCollection");
             }
         }
 
@@ -54,12 +57,28 @@ namespace Star_Reader
             }
         }
 
+        public SeriesCollection SeriesCollection { get; set; }
+        public Func<double, string> Formatter { get; set; }
+        public Func<double, string> Formatter1 { get; set; }
+        public Func<double, string> Formatter2 { get; set; }
+
+        public double errValue { get; set; }
+        public double packetValue { get; set; }
+        public double charValue { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void NotifyPropertyChanged(string property)
+        {
+            // PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(property));
+        }
+
         private void FilterCollection()
         {
             if (dataGridCollection != null)
-            {
                 dataGridCollection.Refresh();
-            }
         }
 
         public bool Filter(object obj)
@@ -67,17 +86,29 @@ namespace Star_Reader
             var packet = obj as Packet;
             if (packet == null) return false;
             if (string.IsNullOrEmpty(filterString)) return true;
-            return packet.ErrorType != null && CultureInfo.CurrentCulture.CompareInfo.IndexOf(packet.ErrorType, filterString, CompareOptions.IgnoreCase) >= 0
-                || packet.Payload != null && CultureInfo.CurrentCulture.CompareInfo.IndexOf(packet.Payload, filterString, CompareOptions.IgnoreCase) >= 0
-                || CultureInfo.CurrentCulture.CompareInfo.IndexOf(packet.PacketType.ToString(), filterString, CompareOptions.IgnoreCase) >= 0
-                || packet.PacketEnd != null && CultureInfo.CurrentCulture.CompareInfo.IndexOf(packet.PacketEnd, filterString, CompareOptions.IgnoreCase) >= 0
-                || CultureInfo.CurrentCulture.CompareInfo.IndexOf(packet.Time.ToString("MM/dd/yyyy HH:mm:ss.fff"), filterString, CompareOptions.IgnoreCase) >= 0;
+            return ((packet.ErrorType != null) &&
+                    (CultureInfo.CurrentCulture.CompareInfo.IndexOf(packet.ErrorType, filterString,
+                         CompareOptions.IgnoreCase) >= 0))
+                   ||
+                   ((packet.Payload != null) &&
+                    (CultureInfo.CurrentCulture.CompareInfo.IndexOf(packet.Payload, filterString,
+                         CompareOptions.IgnoreCase) >= 0))
+                   ||
+                   (CultureInfo.CurrentCulture.CompareInfo.IndexOf(packet.PacketType.ToString(), filterString,
+                        CompareOptions.IgnoreCase) >= 0)
+                   ||
+                   ((packet.PacketEnd != null) &&
+                    (CultureInfo.CurrentCulture.CompareInfo.IndexOf(packet.PacketEnd, filterString,
+                         CompareOptions.IgnoreCase) >= 0))
+                   ||
+                   (CultureInfo.CurrentCulture.CompareInfo.IndexOf(packet.Time.ToString("MM/dd/yyyy HH:mm:ss.fff"),
+                        filterString, CompareOptions.IgnoreCase) >= 0);
         }
 
         private void Row_DoubleClick(object sender, MouseButtonEventArgs e)
         {
             var packet = DetailedViewerA.SelectedItem;
-            var selectedRow = (DataGridRow)DetailedViewerA.ItemContainerGenerator.ContainerFromIndex(DetailedViewerA.SelectedIndex);
+            var selectedRow =(DataGridRow) DetailedViewerA.ItemContainerGenerator.ContainerFromIndex(DetailedViewerA.SelectedIndex);
             FilterString = "";
             FilterCollection();
             if (selectedRow == null) return;
@@ -87,36 +118,24 @@ namespace Star_Reader
             FocusManager.SetFocusedElement(selectedRow, selectedRow);
         }
 
-        //Constructor
-        public DetailsTab(int portNr)
-        {
-            InitializeComponent();
-            PopulateOverview(portNr);
-            DataGridCollection = CollectionViewSource.GetDefaultView(App.RecordingData[portNr].ListOfPackets);
-            DataGridCollection.Filter = Filter;
-            InitialiseTimeStamps();
-            initialiseGauge();
-            DataContext = this;
-        }
-         
         //generating the button in the overview
         public void PopulateOverview(int portNr)
         {
             const int size = 20;
             var r = App.RecordingData[portNr];
             if (r == null) return;
-            int length = r.ListOfPackets.Count;
+            var length = r.ListOfPackets.Count;
 
-            for (int i = 0; i < length; i++)
+            for (var i = 0; i < length; i++)
             {
-                Packet p = r.ListOfPackets[i];
+                var p = r.ListOfPackets[i];
                 if (i > 0)
                 {
-                    Packet NextP = r.ListOfPackets[i - 1];
-                    TimeSpan td = p.Time.Subtract(NextP.Time);
+                    var NextP = r.ListOfPackets[i - 1];
+                    var td = p.Time.Subtract(NextP.Time);
                     if (td.TotalMilliseconds > 100)
                     {
-                        Button btn1s = new Button
+                        var btn1s = new Button
                         {
                             Width = size,
                             Height = size
@@ -132,19 +151,21 @@ namespace Star_Reader
                             case 2:
                             case 3:
                             case 4:
-                                btn1s.ToolTip = "Empty Space of " + td.Seconds + "." + td.TotalMilliseconds.ToString().Substring(1) + " seconds.";
-                                btn1s.Background = (SolidColorBrush)new BrushConverter().ConvertFrom("#ffe699");  // Beige
+                                btn1s.ToolTip = "Empty Space of " + td.Seconds + "." +
+                                                td.TotalMilliseconds.ToString().Substring(1) + " seconds.";
+                                btn1s.Background = (SolidColorBrush) new BrushConverter().ConvertFrom("#ffe699");
+                                    // Beige
                                 break;
                             default:
-                                btn1s.ToolTip = "Empty Space of " + td.Seconds + "." + td.TotalMilliseconds.ToString().Substring(1) + " seconds.";
+                                btn1s.ToolTip = "Empty Space of " + td.Seconds + "." +
+                                                td.TotalMilliseconds.ToString().Substring(1) + " seconds.";
                                 btn1s.Background = Brushes.Crimson;
                                 break;
                         }
                         PacketViewerA.Children.Add(btn1s);
-
                     }
                 }
-                Button btn1 = new Button
+                var btn1 = new Button
                 {
                     Width = size,
                     Height = size
@@ -154,13 +175,15 @@ namespace Star_Reader
                     switch (p.ErrorType)
                     {
                         case "Disconnect":
-                            btn1.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#ff3333"));
-                            btn1.ToolTip = p.Time + "." + p.Time.ToString("fff") + "\n" + p.PacketType + "\n" + p.ErrorType;
+                            btn1.Background = (SolidColorBrush) new BrushConverter().ConvertFrom("#ff3333");
+                            btn1.ToolTip = p.Time + "." + p.Time.ToString("fff") + "\n" + p.PacketType + "\n" +
+                                           p.ErrorType;
                             btn1.Content = p.ErrorType[0];
                             break;
                         case "Parity":
                             btn1.Background = Brushes.Yellow;
-                            btn1.ToolTip = p.Time + "." + p.Time.ToString("fff") + "\n" + p.PacketType + "\n" + p.ErrorType;
+                            btn1.ToolTip = p.Time + "." + p.Time.ToString("fff") + "\n" + p.PacketType + "\n" +
+                                           p.ErrorType;
                             btn1.Content = p.ErrorType[0];
                             break;
                     }
@@ -169,21 +192,23 @@ namespace Star_Reader
                 {
                     if (p.PacketEnd.Equals("EOP"))
                     {
-                        btn1.Background = (SolidColorBrush)new BrushConverter().ConvertFrom("#00dddd");   // Blue
-                        btn1.ToolTip = p.Time + "." + p.Time.ToString("fff") + "\n" + p.PacketType + "\n" + p.Payload + "\n" + p.PacketEnd;
+                        btn1.Background = (SolidColorBrush) new BrushConverter().ConvertFrom("#00dddd"); // Blue
+                        btn1.ToolTip = p.Time + "." + p.Time.ToString("fff") + "\n" + p.PacketType + "\n" + p.Payload +
+                                       "\n" + p.PacketEnd;
+                    }
+                    else if (p.PacketEnd.Equals("EEP"))
+                    {
+                        btn1.Background = Brushes.Red;
+                        btn1.ToolTip = p.Time + "." + p.Time.ToString("fff") + "\n" + p.PacketType + "\n" + p.Payload +
+                                       "\n" + p.PacketEnd;
+                        btn1.Content = p.PacketEnd[0];
                     }
                     else
-                        if (p.PacketEnd.Equals("EEP"))
-                        {
-                            btn1.Background = Brushes.Red;
-                            btn1.ToolTip = p.Time + "." + p.Time.ToString("fff") + "\n" + p.PacketType + "\n" + p.Payload + "\n" + p.PacketEnd;
-                            btn1.Content = p.PacketEnd[0];
-                        }
-                        else
-                        {
-                            btn1.Background = (SolidColorBrush)new BrushConverter().ConvertFrom("#ffaacc");   // Pink
-                            btn1.ToolTip = p.Time + "." + p.Time.ToString("fff") + "\n" + p.PacketType + "\n" + p.Payload + "\n" + p.PacketEnd;
-                        }
+                    {
+                        btn1.Background = (SolidColorBrush) new BrushConverter().ConvertFrom("#ffaacc"); // Pink
+                        btn1.ToolTip = p.Time + "." + p.Time.ToString("fff") + "\n" + p.PacketType + "\n" + p.Payload +
+                                       "\n" + p.PacketEnd;
+                    }
                 }
                 btn1.Click += btn_click;
                 btn1.Tag = portNr + "" + i;
@@ -191,19 +216,19 @@ namespace Star_Reader
             }
             gData = r;
             InitialiseGraphs();
-        }//End of PopulateOverview
+        } //End of PopulateOverview
 
         //on click for buttons in overview
         protected void btn_click(object sender, EventArgs e)
         {
-            Button b = (Button)sender;
-            string x = b.Tag.ToString();
-            char portc = x[0];
-            int port = int.Parse(portc + "");
-            int item = int.Parse(x.Substring(1));
+            var b = (Button) sender;
+            var x = b.Tag.ToString();
+            var portc = x[0];
+            var port = int.Parse(portc + "");
+            var item = int.Parse(x.Substring(1));
             DetailedViewerA.ScrollIntoView(App.RecordingData[port].ListOfPackets[item]);
             DetailedViewerA.SelectedItem = App.RecordingData[port].ListOfPackets[item];
-            var selectedRow = (DataGridRow)DetailedViewerA.ItemContainerGenerator.ContainerFromIndex(DetailedViewerA.SelectedIndex);
+            var selectedRow =(DataGridRow) DetailedViewerA.ItemContainerGenerator.ContainerFromIndex(DetailedViewerA.SelectedIndex);
             FocusManager.SetIsFocusScope(selectedRow, true);
             FocusManager.SetFocusedElement(selectedRow, selectedRow);
         }
@@ -249,18 +274,15 @@ namespace Star_Reader
             };
 
             DataRate.IsChecked = true;
-        }//End of InitialiseGraphs
+        } //End of InitialiseGraphs
 
         private void DataRate_Checked(object sender, RoutedEventArgs e)
         {
-            Graphing getPlots = new Graphing();
+            var getPlots = new Graphing();
 
-            List<double> plots = getPlots.getPlots(gData);
-            for (int x = 0; x < plots.Count; x++)
-            {
-                SeriesCollection[0].Values.Add(plots[x]);
-            }
-
+            var plots = getPlots.GetPlots(gData);
+            foreach (double plot in plots)
+                SeriesCollection[0].Values.Add(plot);
         }
 
         private void DataRate_Unchecked(object sender, RoutedEventArgs e)
@@ -270,8 +292,8 @@ namespace Star_Reader
 
         private void Errors_Checked(object sender, RoutedEventArgs e)
         {
-            Graphing getBars = new Graphing();
-            List<double> bars = getBars.getBars(gData);
+            var getBars = new Graphing();
+            var bars = getBars.GetBars(gData);
             SeriesCollection[1].Values.Add(bars[0]);
             SeriesCollection[2].Values.Add(bars[1]);
             SeriesCollection[3].Values.Add(bars[2]);
@@ -286,11 +308,6 @@ namespace Star_Reader
             SeriesCollection[4].Values.Clear();
         }
 
-        public SeriesCollection SeriesCollection { get; set; }
-        public Func<double, string> Formatter { get; set; }
-        public Func<double, string> Formatter1 { get; set; }
-        public Func<double, string> Formatter2 { get; set; }
-
         private void initialiseGauge()
         {
             errValue = gData.ErrorsPresent;
@@ -298,24 +315,13 @@ namespace Star_Reader
             charValue = gData.GetNumberOfCharacters();
 
             Formatter = x => x + " ";
-
             Formatter1 = x => x + " ";
-
             Formatter2 = x => x + " ";
 
             NotifyPropertyChanged("errValue");
             NotifyPropertyChanged("packetValue");
             NotifyPropertyChanged("charValue");
-
         }
-       
-
-
-        public double errValue { get; set; }
-
-        public double packetValue { get; set; }
-
-        public double charValue { get; set; }
 
         /*
          * Initialise the time stamps for the left side of the overview.
@@ -337,7 +343,7 @@ namespace Star_Reader
 
             //int childrenCount2 = VisualTreeHelper.GetChildrenCount(TimeStamps);
 
-            Button contain2 = VisualTreeHelper.GetChild(PacketViewerA, 0) as Button;
+            var contain2 = VisualTreeHelper.GetChild(PacketViewerA, 0) as Button;
             //Button contain3 = VisualTreeHelper.GetChild(PacketViewerA, 1) as Button;
             //UIElement container2 = VisualTreeHelper.GetParent(contain2) as UIElement;
             //Point relativeLocation = contain2.TranslatePoint(new Point(0, yPlus), container2);
@@ -375,7 +381,7 @@ namespace Star_Reader
             string str2 = null;
             str2 = contain2.ToolTip as string;
 
-            Label Lbl1 = new Label
+            var Lbl1 = new Label
             {
                 Height = 20,
                 FontSize = 9,
@@ -391,8 +397,6 @@ namespace Star_Reader
             //{
             //do nothing
             //}
-
-        }//End of InitialiseTimeStamps
-
+        } //End of InitialiseTimeStamps
     }
 }

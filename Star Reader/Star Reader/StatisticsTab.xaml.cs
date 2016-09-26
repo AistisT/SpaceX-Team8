@@ -1,50 +1,50 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Navigation;
 using Dragablz;
 using LiveCharts;
-using System;
-using Star_Reader.Model;
-using System.Collections.Generic;
-using System.Windows;
 using LiveCharts.Wpf;
+using Star_Reader.Model;
 
 namespace Star_Reader
 {
     public partial class StatisticsTab : TabItem, INotifyPropertyChanged
     {
-        public double NrOfErrors { get; set; }
+        private Recording chartRecording;
 
-        public double NrOfPackets { get; set; }
-
-        public double NrOfCharacters { get; set; }
-
-        public SeriesCollection SeriesCollection { get; set; }
-        public Func<double, string> Formatter { get; set; }
-        public Func<double, string> Formatter1 { get; set; }
-        public Func<double, string> Formatter2 { get; set; }
-        private Recording gData;
-        public string[] Labels { get; set; }
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private bool chartInitialized = false;
-
-        private void NotifyPropertyChanged(string property)
+        public StatisticsTab(TabablzControl tabControl)
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(property));
-            }
-        }
-        public StatisticsTab()
-        {
+            this.TabControl = tabControl;
             InitializeComponent();
-            
+            InitialiseGraphs();
             if (App.RecordingData.Count != 0)
             {
                 CalculateDataForGougeCharts();
                 CalculateDataForCharts();
             }
         }
+
+        private TabablzControl TabControl { get; set; }
+
+        public double NrOfErrors { get; set; }
+        public double NrOfPackets { get; set; }
+        public double NrOfCharacters { get; set; }
+        public SeriesCollection SeriesCollection { get; set; }
+        public Func<double, string> Formatter { get; set; }
+        public string[] Labels { get; set; }
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void NotifyPropertyChanged(string property)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(property));
+        }
+
         public void CalculateDataForGougeCharts()
         {
             NrOfErrors = 0;
@@ -65,18 +65,38 @@ namespace Star_Reader
         public void CalculateDataForCharts()
         {
             DataContext = this;
-            gData = null;
-            gData = new Recording();
+            chartRecording = null;
+            chartRecording = new Recording();
+            ClearSeriesCollection();
+            foreach (var recording in App.RecordingData.Values)
+                chartRecording.ListOfPackets.AddRange(recording.ListOfPackets);
+            if((bool) !DataRate.IsChecked)
+            DataRate.IsChecked = true;
+            else
+            GenerateDataRate();
+        }
 
+        public void ShowLoadedPorts(int portNr)
+        {
+            OpenPortPanel.Children.Clear();
             foreach (var recording in App.RecordingData.Values)
             {
-                gData.ListOfPackets.AddRange(recording.ListOfPackets);
+                var button = new Button
+                {
+                    Content = recording.Port,
+                    Background = Brushes.DarkBlue,
+                    Foreground = Brushes.White,
+
+                };
+                button.Click += btn_click;
+                OpenPortPanel.Children.Add(button);
             }
-            if (!chartInitialized)
-            {
-                InitialiseGraphs();
-                chartInitialized = true;
-            }
+        }
+
+        protected void btn_click(object sender, EventArgs e)
+        {
+            var b = (Button)sender;
+            var x = b.Content.ToString();
         }
 
         //InitialiseGraphs on right of screen
@@ -87,7 +107,7 @@ namespace Star_Reader
                 new LineSeries
                 {
                     Title = "Data rate B/m",
-                    Values = new ChartValues<double>()
+                    Values = new ChartValues<double>(),
                 },
                 new RowSeries
                 {
@@ -118,19 +138,23 @@ namespace Star_Reader
                     LabelPoint = point => point.X + ""
                 }
             };
-
-            DataRate.IsChecked = true;
-        }//End of InitialiseGraphs
+        } //End of InitializeGraphs
 
         private void DataRate_Checked(object sender, RoutedEventArgs e)
         {
-            Graphing getPlots = new Graphing();
+            GenerateDataRate();
+        }
 
-            List<double> plots = getPlots.getPlots(gData);
-            for (int x = 0; x < plots.Count; x++)
+        private void GenerateDataRate()
+        {
+            var getPlots = new Graphing();
+
+            var plots = new List<double>();
+            foreach (var recording in App.RecordingData.Values)
+                plots.AddRange(getPlots.GetPlots(recording));
+            foreach (double plot in plots)
             {
-                SeriesCollection[0].Values.Add(plots[x]);
-                DataContext = this;
+                SeriesCollection[0].Values.Add(plot);
             }
         }
 
@@ -141,13 +165,12 @@ namespace Star_Reader
 
         private void Errors_Checked(object sender, RoutedEventArgs e)
         {
-            Graphing getBars = new Graphing();
-            List<double> bars = getBars.getBars(gData);
+            var getBars = new Graphing();
+            if (chartRecording == null) return;
+            var bars = getBars.GetBars(chartRecording);
             SeriesCollection[1].Values.Add(bars[0]);
             SeriesCollection[2].Values.Add(bars[1]);
             SeriesCollection[3].Values.Add(bars[2]);
-            SeriesCollection[4].Values.Add(bars[3]);
-            DataContext = this;
         }
 
         private void Errors_Unchecked(object sender, RoutedEventArgs e)
@@ -156,7 +179,14 @@ namespace Star_Reader
             SeriesCollection[2].Values.Clear();
             SeriesCollection[3].Values.Clear();
             SeriesCollection[4].Values.Clear();
-            DataContext = this;
+        }
+
+        private void ClearSeriesCollection()
+        {
+            foreach (var collection in SeriesCollection)
+            {
+                collection.Values.Clear();
+            }
         }
     }
 }

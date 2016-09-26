@@ -20,7 +20,7 @@ namespace Star_Reader
             DataContext = new MainWindowViewModel();
             InitializeComponent();
            
-            statisticsTab = new StatisticsTab
+            statisticsTab = new StatisticsTab(TabControl)
             {
                Name = "Statistics"
             };
@@ -56,11 +56,12 @@ namespace Star_Reader
                 DetailsTab tab = new DetailsTab(r.Port)
                 {
                     Header = "Port " + r.Port,
-                    Name = name
+                    Name = name,
                 };
                 TabControl.AddToSource(tab);
                 statisticsTab.CalculateDataForGougeCharts();
                 statisticsTab.CalculateDataForCharts();
+                statisticsTab.ShowLoadedPorts(r.Port);
             }
         }
 

@@ -18,8 +18,17 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="0.4*"/>
         </Grid.ColumnDefinitions>
+        <Grid Grid.Column="1"  HorizontalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.2*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Label FontSize="24" FontWeight="DemiBold" >Ports Currently Open</Label>
+            <StackPanel Margin="10,10,10,10" Grid.Row="1" Name="OpenPortPanel" Width="auto"></StackPanel>
+        </Grid>
+
         <!--Gauge start (bottom right)-->
         <Grid Grid.Row="0" Grid.Column="0">
 
@@ -29,48 +38,48 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            
-            <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Column="0" Margin="0,0,0,150" >
+
+            <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Column="0" Margin="0,0,0,250" >
                 <TextBlock FontSize="14" Foreground="Black" FontWeight="Bold" ToolTip="Number of errors" HorizontalAlignment="Center"  VerticalAlignment="Top" Text="Number of errors"/>
             </DockPanel>
 
-            <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Column="1" Margin="0,0,0,150" >
+            <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Column="1" Margin="0,0,0,250" >
                 <TextBlock FontSize="14" Foreground="Black" FontWeight="Bold" ToolTip="Number of packets" HorizontalAlignment="Center" VerticalAlignment="Top"  Text="Number of packets"/>
             </DockPanel>
 
-            <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Column="2" Margin="0,0,0,150" >
+            <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Column="2" Margin="0,0,0,250" >
                 <TextBlock FontSize="14" Foreground="Black" FontWeight="Bold" ToolTip="Number of data characters" HorizontalAlignment="Center" VerticalAlignment="Top"  Text="Number of data characters"/>
             </DockPanel>
-           
+
             <lvc:Gauge Grid.Column="0" Uses360Mode="False" From="0" To="{Binding NrOfPackets}" Value="{Binding NrOfErrors}" />
             <lvc:Gauge Grid.Column="1" Uses360Mode="False" From="0" To="{Binding NrOfCharacters}" Value="{Binding NrOfPackets}" />
             <lvc:Gauge Grid.Column="2" Uses360Mode="False" From="0" To="{Binding NrOfCharacters}" Value="{Binding NrOfCharacters}" />
         </Grid>
         <!--Gauge end-->
         <!--Chart start (bottom left)-->
-        <Grid Grid.Row="1" Grid.Column="0">
+        <Grid Grid.Row="1" Grid.Column="0" ColumnSpan="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="0.2*"></RowDefinition>
             </Grid.RowDefinitions>
-            
-        <lvc:CartesianChart Grid.Row="0"  Margin="5,0,0,0">
-            <lvc:CartesianChart.AxisX>
+
+            <lvc:CartesianChart Grid.Row="0"  Margin="5,0,0,0">
+                <lvc:CartesianChart.AxisX>
                     <lvc:Axis Title="Test" LabelFormatter="{Binding Formatter}" Labels="{Binding Labels}"></lvc:Axis>
-            </lvc:CartesianChart.AxisX>
+                </lvc:CartesianChart.AxisX>
 
-            <lvc:CartesianChart Series="{Binding SeriesCollection}" LegendLocation="Right"/>
-        </lvc:CartesianChart>
-        <!--Chart end-->
+                <lvc:CartesianChart Series="{Binding SeriesCollection}" LegendLocation="Right"/>
+            </lvc:CartesianChart>
+            <!--Chart end-->
 
-        <!--Radio buttons start (bottom left, under chart)-->
-        <WrapPanel  Grid.Row="1" Margin="5,5,5,10">
-            <RadioButton x:Name="DataRate" Content="DataRate bytes per min" HorizontalAlignment="Left" VerticalAlignment="bottom" Checked="DataRate_Checked" Unchecked="DataRate_Unchecked"/>
-            <RadioButton Margin="10,0,0,0" x:Name="Errors" Content="Errors" HorizontalAlignment="Left" VerticalAlignment="bottom" Checked="Errors_Checked" Unchecked="Errors_Unchecked"/>
-        </WrapPanel>
-        <!--Radio buttons end-->
+            <!--Radio buttons start (bottom left, under chart)-->
+            <WrapPanel  Grid.Row="1" Margin="5,5,5,10">
+                <RadioButton x:Name="DataRate" Content="DataRate bytes per min" HorizontalAlignment="Left" VerticalAlignment="bottom" Checked="DataRate_Checked" Unchecked="DataRate_Unchecked"/>
+                <RadioButton Margin="10,0,0,0" x:Name="Errors" Content="Errors" HorizontalAlignment="Left" VerticalAlignment="bottom" Checked="Errors_Checked" Unchecked="Errors_Unchecked"/>
+            </WrapPanel>
+            <!--Radio buttons end-->
         </Grid>
-       
+
     </Grid>
 
 </TabItem>
