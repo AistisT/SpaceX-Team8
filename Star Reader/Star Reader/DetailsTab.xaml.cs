@@ -74,8 +74,18 @@ namespace Star_Reader
                 || CultureInfo.CurrentCulture.CompareInfo.IndexOf(packet.Time.ToString("MM/dd/yyyy HH:mm:ss.fff"), filterString, CompareOptions.IgnoreCase) >= 0;
         }
 
-
-
+        private void Row_DoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            var packet = DetailedViewerA.SelectedItem;
+            var selectedRow = (DataGridRow)DetailedViewerA.ItemContainerGenerator.ContainerFromIndex(DetailedViewerA.SelectedIndex);
+            FilterString = "";
+            FilterCollection();
+            if (selectedRow == null) return;
+            DetailedViewerA.ScrollIntoView(packet);
+            DetailedViewerA.SelectedItem = packet;
+            FocusManager.SetIsFocusScope(selectedRow, true);
+            FocusManager.SetFocusedElement(selectedRow, selectedRow);
+        }
 
         //Constructor
         public DetailsTab(int portNr)
@@ -91,7 +101,7 @@ namespace Star_Reader
 
         //generating the button in the overview
         public void PopulateOverview(int portNr)
-        { 
+        {
             const int size = 20;
             var r = App.RecordingData[portNr];
             if (r == null) return;
@@ -164,16 +174,16 @@ namespace Star_Reader
                     }
                     else
                         if (p.PacketEnd.Equals("EEP"))
-                    {
-                        btn1.Background = Brushes.Red;
-                        btn1.ToolTip = p.Time + "." + p.Time.ToString("fff") + "\n" + p.PacketType + "\n" + p.Payload + "\n" + p.PacketEnd;
-                        btn1.Content = p.PacketEnd[0];
-                    }
-                    else
-                    {
-                        btn1.Background = (SolidColorBrush)new BrushConverter().ConvertFrom("#ffaacc");   // Pink
-                        btn1.ToolTip = p.Time + "." + p.Time.ToString("fff") + "\n" + p.PacketType + "\n" + p.Payload + "\n" + p.PacketEnd;
-                    }
+                        {
+                            btn1.Background = Brushes.Red;
+                            btn1.ToolTip = p.Time + "." + p.Time.ToString("fff") + "\n" + p.PacketType + "\n" + p.Payload + "\n" + p.PacketEnd;
+                            btn1.Content = p.PacketEnd[0];
+                        }
+                        else
+                        {
+                            btn1.Background = (SolidColorBrush)new BrushConverter().ConvertFrom("#ffaacc");   // Pink
+                            btn1.ToolTip = p.Time + "." + p.Time.ToString("fff") + "\n" + p.PacketType + "\n" + p.Payload + "\n" + p.PacketEnd;
+                        }
                 }
                 btn1.Click += btn_click;
                 btn1.Tag = portNr + "" + i;
@@ -299,9 +309,9 @@ namespace Star_Reader
         public double errValue { get; set; }
 
         public double packetValue { get; set; }
-        
+
         public double charValue { get; set; }
-       
+
         /*
          * Initialise the time stamps for the left side of the overview.
          * Coordinates for the buttons are all 0.
@@ -314,12 +324,12 @@ namespace Star_Reader
         public void InitialiseTimeStamps()
         {
             //InitialLabel.Margin = new Thickness(0, 0, 0, 0); //Left, top, right, bottom
-            
+
             //int childrenCount = VisualTreeHelper.GetChildrenCount(TimeStamps);
             //UIElement contain = VisualTreeHelper.GetChild(TimeStamps, childrenCount - 1) as UIElement;
             //UIElement container = VisualTreeHelper.GetParent(contain) as UIElement;
             //Point relativeLocation = contain.TranslatePoint(new Point(0, yPlus), container);
-            
+
             //int childrenCount2 = VisualTreeHelper.GetChildrenCount(TimeStamps);
 
             Button contain2 = VisualTreeHelper.GetChild(PacketViewerA, 0) as Button;
@@ -376,7 +386,7 @@ namespace Star_Reader
             //{
             //do nothing
             //}
-            
+
         }//End of InitialiseTimeStamps
 
     }

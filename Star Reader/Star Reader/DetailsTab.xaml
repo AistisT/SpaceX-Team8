@@ -66,7 +66,11 @@
                     <DataGridTextColumn Header="Error Type" Binding="{Binding ErrorType}"></DataGridTextColumn>
                     <DataGridTextColumn Header="Packet End" Binding="{Binding PacketEnd}" Width="0.7*"></DataGridTextColumn>
                 </DataGrid.Columns>
-                    
+                <DataGrid.ItemContainerStyle>
+                    <Style TargetType="DataGridRow">
+                        <EventSetter Event="MouseDoubleClick" Handler="Row_DoubleClick"/>
+                    </Style>
+                </DataGrid.ItemContainerStyle>
                 <DataGrid.CellStyle>
                     <Style TargetType="DataGridCell">
                         <Style.Triggers>
