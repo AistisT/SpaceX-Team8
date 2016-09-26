@@ -79,5 +79,23 @@ namespace Star_Reader.Model
         {
             return PacketEndTime.Subtract(PacketStartTime);
         }
+
+        /// <summary>
+        /// Tests the recording for repeating packets being transmitted
+        /// </summary>
+        public void testForBabblingIdiot()
+        {
+            for(int i = 4;i<ListOfPackets.Count;i++)
+            {
+                string payload = ListOfPackets[i].Payload;
+                if (payload == ListOfPackets[i - 1].Payload
+                    && payload == ListOfPackets[i - 2].Payload
+                    && payload == ListOfPackets[i - 3].Payload
+                    && payload == ListOfPackets[i - 4].Payload)
+                {
+                    ListOfPackets[i].ErrorType += "Babbling Idiot Detected";
+                }
+            }
+        }
     }
 }
