@@ -13,7 +13,7 @@
         <system:String x:Key="Partition">QuickStart</system:String>
     </Window.Resources>
 
-    <dockablz:Layout Partition="{StaticResource Partition}" >
+    <dockablz:Layout Partition="{StaticResource Partition}" Name="TabLayout" >
         <dragablz:TabablzControl Name="TabControl" ConsolidateOrphanedItems="True" ShowDefaultCloseButton="True">
             <dragablz:TabablzControl.InterTabController>
                 <dragablz:InterTabController InterTabClient="{Binding InterTabClient}" Partition="{StaticResource Partition}" />

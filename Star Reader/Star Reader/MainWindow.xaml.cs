@@ -19,6 +19,7 @@ namespace Star_Reader
         {
             DataContext = new MainWindowViewModel();
             InitializeComponent();
+           
             statisticsTab = new StatisticsTab
             {
                Name = "Statistics"
@@ -59,6 +60,7 @@ namespace Star_Reader
                 };
                 TabControl.AddToSource(tab);
                 statisticsTab.CalculateDataForGougeCharts();
+                statisticsTab.CalculateDataForCharts();
             }
         }
 

@@ -259,7 +259,6 @@ namespace Star_Reader
             for (int x = 0; x < plots.Count; x++)
             {
                 SeriesCollection[0].Values.Add(plots[x]);
-                DataContext = this;
             }
 
         }
