@@ -88,7 +88,7 @@ namespace Star_Reader
             initialiseGauge();
             DataContext = this;
         }
-
+         
         //generating the button in the overview
         public void PopulateOverview(int portNr)
         { 
@@ -294,7 +294,13 @@ namespace Star_Reader
 
             Formatter2 = x => x + " ";
 
+            NotifyPropertyChanged("errValue");
+            NotifyPropertyChanged("packetValue");
+            NotifyPropertyChanged("charValue");
+
         }
+       
+
 
         public double errValue { get; set; }
 

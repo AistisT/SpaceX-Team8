@@ -97,7 +97,8 @@
                 </DataGrid.CellStyle>
             </DataGrid>
             <!--data grid end-->
-
+            <!--labes for gauges-->
+            
             <!--Gauge start (bottom right)-->
             <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,0,10">
                 <Grid.ColumnDefinitions>
@@ -105,12 +106,24 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
+                
+                <DockPanel  HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Row="2" Grid.Column="0" Margin="0,0,0,30" >
+                    <TextBlock  FontSize="14" Foreground="Black" FontWeight="Bold" ToolTip="Number of errors" HorizontalAlignment="Center"  VerticalAlignment="Top"  Text="Number of errors"/>
+                </DockPanel>
 
-                <lvc:Gauge Grid.Column="0" Uses360Mode="False" From="0" To="{Binding totalNubOfPackets}" Value="{Binding errValue}" 
+                <DockPanel  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2"  Grid.Column="1" Margin="0,0,0,30" >
+                    <TextBlock  FontSize="14" Foreground="Black" FontWeight="Bold" ToolTip="Number of packets" HorizontalAlignment="Center" VerticalAlignment="Top"  Text="Number of packets"/>
+                </DockPanel>
+
+                <DockPanel ToolTip="Number of data characters" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2"  Grid.Column="2" Margin="0,0,0,30" >
+                    <TextBlock  FontSize="14" Foreground="Black" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top"  Text="Number of data characters"/>
+                </DockPanel>
+                
+                <lvc:Gauge Grid.Column="0" Uses360Mode="False" From="0" To="{Binding packetValue}" Value="{Binding errValue}" 
                            LabelFormatter="{Binding Formatter}" />
-                <lvc:Gauge Grid.Column="1" Uses360Mode="False" From="0" To="100" Value="{Binding packetValue}" 
+                <lvc:Gauge Grid.Column="1" Uses360Mode="False" From="0" To="{Binding charValue}" Value="{Binding packetValue}" 
                            LabelFormatter="{Binding Formatter1}" />
-                <lvc:Gauge Grid.Column="2" Uses360Mode="False" From="0" To="100" Value="{Binding charValue}" 
+                <lvc:Gauge Grid.Column="2" Uses360Mode="False" From="0" To="{Binding charValue}" Value="{Binding charValue}" 
                            LabelFormatter="{Binding Formatter2}" />
             </Grid>
             <!--Gauge end-->
