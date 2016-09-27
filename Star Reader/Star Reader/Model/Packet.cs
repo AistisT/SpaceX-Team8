@@ -21,6 +21,7 @@ namespace Star_Reader.Model
             PacketType = pt;
             PacketEnd = pe;
         }
+
         public Packet(DateTime dt, char pt, string et)
         {
             Time = dt;

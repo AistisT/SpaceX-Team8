@@ -8,7 +8,14 @@
         xmlns:dockablz="http://dragablz.net/winfx/xaml/dockablz"
         xmlns:system="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="Star Reader Tab" Height="720" Width="1280">
+        Title="Star Reader Tab" 
+        
+        MinHeight="720"
+        MinWidth="850"
+        
+        Height="720"
+        Width="1280">
+    
     <Window.Resources>
         <system:String x:Key="Partition">QuickStart</system:String>
     </Window.Resources>
