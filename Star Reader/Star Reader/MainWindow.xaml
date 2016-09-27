@@ -19,6 +19,7 @@
     <Window.Resources>
         <system:String x:Key="Partition">QuickStart</system:String>
     </Window.Resources>
+    
     <Grid>
         <DockPanel>
             <!--menu for the top buttons-->
@@ -30,8 +31,10 @@
                 </MenuItem>
                 <MenuItem Header="About" Height="20" Width="60" Click ="aboutButton_OnClick"/>
             </Menu>
+            
             <TextBox AcceptsReturn="True" />
         </DockPanel>
+        
         <dockablz:Layout Partition="{StaticResource Partition}" Name="TabLayout">
             <dragablz:TabablzControl Margin="0,20,0,0" ConsolidateOrphanedItems="True" Name="TabControl" >
                 <dragablz:TabablzControl.InterTabController >

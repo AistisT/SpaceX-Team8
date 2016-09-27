@@ -96,7 +96,6 @@ namespace Star_Reader
                     Content = recording.Port,
                     Background = Brushes.DarkBlue,
                     Foreground = Brushes.White,
-
                 };
                 button.Click += btn_click;
                 OpenPortPanel.Children.Add(button);
