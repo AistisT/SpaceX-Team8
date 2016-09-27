@@ -16,6 +16,7 @@ namespace Star_Reader
     public partial class StatisticsTab : TabItem, INotifyPropertyChanged
     {
         private Recording chartRecording;
+        private TabablzControl TabControl { get; set; }
 
         public StatisticsTab(TabablzControl tabControl)
         {
@@ -29,11 +30,11 @@ namespace Star_Reader
             }
         }
 
-        private TabablzControl TabControl { get; set; }
-
-        public double NrOfErrors { get; set; }
-        public double NrOfPackets { get; set; }
-        public double NrOfCharacters { get; set; }
+        public int NrOfErrors { get; set; }
+        public int NrOfPackets { get; set; }
+        public int NrOfCharacters { get; set; }
+        public int NrOfPacketsTo { get; set; }
+        public int NrOfCharactersTo { get; set; }
         public SeriesCollection SeriesCollection { get; set; }
         public Func<double, string> Formatter { get; set; }
         public string[] Labels { get; set; }
@@ -56,10 +57,19 @@ namespace Star_Reader
                 NrOfPackets += recording.ListOfPackets.Count;
                 NrOfCharacters += recording.GetNumberOfCharacters();
             }
+            NrOfCharactersTo = NrOfCharacters;
+            NrOfPacketsTo = NrOfPackets;
+            if (NrOfCharacters == 0)
+                NrOfCharactersTo = 1;
+            if (NrOfPackets == 0)
+                NrOfPacketsTo = 1;
             DataContext = this;
             NotifyPropertyChanged("NrOfErrors");
             NotifyPropertyChanged("NrOfPackets");
             NotifyPropertyChanged("NrOfCharacters");
+            NotifyPropertyChanged("NrOfPacketsTo");
+            NotifyPropertyChanged("NrOfCharactersTo");
+
         }
 
         public void CalculateDataForCharts()
@@ -70,13 +80,13 @@ namespace Star_Reader
             ClearSeriesCollection();
             foreach (var recording in App.RecordingData.Values)
                 chartRecording.ListOfPackets.AddRange(recording.ListOfPackets);
-            if((bool) !DataRate.IsChecked)
-            DataRate.IsChecked = true;
+            if ((bool)!DataRate.IsChecked)
+                DataRate.IsChecked = true;
             else
-            GenerateDataRate();
+                GenerateDataRate();
         }
 
-        public void ShowLoadedPorts(int portNr)
+        public void ShowLoadedPorts()
         {
             OpenPortPanel.Children.Clear();
             foreach (var recording in App.RecordingData.Values)

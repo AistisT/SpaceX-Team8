@@ -53,15 +53,15 @@ namespace Star_Reader
                     }
                 }
                 App.RecordingData.Add(r.Port, r);
-                DetailsTab tab = new DetailsTab(r.Port)
+                DetailsTab tab = new DetailsTab(r.Port,statisticsTab)
                 {
-                    Header = "Port " + r.Port,
                     Name = name,
                 };
+                tab.SetHeader(new TextBlock { Text = "Port " + r.Port + '\u25BC' });
                 TabControl.AddToSource(tab);
                 statisticsTab.CalculateDataForGougeCharts();
                 statisticsTab.CalculateDataForCharts();
-                statisticsTab.ShowLoadedPorts(r.Port);
+                statisticsTab.ShowLoadedPorts();
             }
         }
 

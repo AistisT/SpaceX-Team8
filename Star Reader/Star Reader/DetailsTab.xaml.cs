@@ -21,15 +21,19 @@ namespace Star_Reader
         private string filterString;
         private Recording gData;
 
+        private StatisticsTab statTab;
+
         //Constructor
-        public DetailsTab(int portNr)
+        public DetailsTab(int portNr,StatisticsTab statTab)
         {
+            this.statTab = statTab;            
             InitializeComponent();
             PopulateOverview(portNr);
+            initialiseGauge();
             DataGridCollection = CollectionViewSource.GetDefaultView(App.RecordingData[portNr].ListOfPackets);
             DataGridCollection.Filter = Filter;
             InitialiseTimeStamps();
-            initialiseGauge();
+            
             DataContext = this;
         }
 
@@ -58,14 +62,12 @@ namespace Star_Reader
         }
 
         public SeriesCollection SeriesCollection { get; set; }
-        public Func<double, string> Formatter { get; set; }
-        public Func<double, string> Formatter1 { get; set; }
-        public Func<double, string> Formatter2 { get; set; }
 
-        public double errValue { get; set; }
-        public double packetValue { get; set; }
-        public double charValue { get; set; }
-
+        public int NrOfErrors { get; set; }
+        public int NrOfPackets { get; set; }
+        public int NrOfCharacters { get; set; }
+        public int NrOfPacketsTo { get; set; }
+        public int NrOfCharactersTo { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void NotifyPropertyChanged(string property)
@@ -310,18 +312,47 @@ namespace Star_Reader
 
         private void initialiseGauge()
         {
-            errValue = gData.ErrorsPresent;
-            packetValue = gData.ListOfPackets.Count;
-            charValue = gData.GetNumberOfCharacters();
+            NrOfErrors = gData.ErrorsPresent;
+            NrOfPackets = gData.ListOfPackets.Count;
+            NrOfCharacters = gData.GetNumberOfCharacters();
 
-            Formatter = x => x + " ";
-            Formatter1 = x => x + " ";
-            Formatter2 = x => x + " ";
-
-            NotifyPropertyChanged("errValue");
-            NotifyPropertyChanged("packetValue");
-            NotifyPropertyChanged("charValue");
+            NrOfCharactersTo = NrOfCharacters;
+            NrOfPacketsTo = NrOfPackets;
+            if (NrOfCharacters == 0)
+                NrOfCharactersTo = 1;
+            if (NrOfPackets == 0)
+                NrOfPacketsTo = 1;
+            DataContext = this;
+            NotifyPropertyChanged("NrOfErrors");
+            NotifyPropertyChanged("NrOfPackets");
+            NotifyPropertyChanged("NrOfCharacters");
+            NotifyPropertyChanged("NrOfPacketsTo");
+            NotifyPropertyChanged("NrOfCharactersTo");
         }
+
+        public void SetHeader(UIElement header)
+        {
+
+
+            // Close button to remove the tab
+            var closeButton = new CloseButton();
+            closeButton.Click +=
+                (sender, e) =>
+                {
+                    var tabControl = Parent as ItemsControl;
+                    tabControl.Items.Remove(this);
+                    App.RecordingData.Remove(this.gData.Port);
+                    statTab.CalculateDataForGougeCharts();
+                    statTab.CalculateDataForCharts();
+                  
+                    statTab.ShowLoadedPorts();
+                };
+            closeButton.tabHeaderGrid.Children.Add(header);
+
+            // Set the header
+            Header = closeButton;
+        }
+
 
         /*
          * Initialise the time stamps for the left side of the overview.

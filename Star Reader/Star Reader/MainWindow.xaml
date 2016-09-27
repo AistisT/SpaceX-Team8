@@ -33,7 +33,7 @@
             <TextBox AcceptsReturn="True" />
         </DockPanel>
         <dockablz:Layout Partition="{StaticResource Partition}" Name="TabLayout">
-            <dragablz:TabablzControl Margin="0,20,0,0" ConsolidateOrphanedItems="True" Name="TabControl" ShowDefaultCloseButton="True">
+            <dragablz:TabablzControl Margin="0,20,0,0" ConsolidateOrphanedItems="True" Name="TabControl" >
                 <dragablz:TabablzControl.InterTabController >
                     <dragablz:InterTabController InterTabClient="{Binding InterTabClient}" Partition="{StaticResource Partition}" />
                 </dragablz:TabablzControl.InterTabController>
