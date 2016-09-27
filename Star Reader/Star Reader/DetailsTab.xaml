@@ -53,7 +53,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="*" />
-                <RowDefinition Height="0.24*" />
+                <RowDefinition Height="0.3*" />
             </Grid.RowDefinitions>
                 
             <Label FontSize="16" Grid.Row="0" Grid.Column="0" FontWeight="Bold">Search</Label>
