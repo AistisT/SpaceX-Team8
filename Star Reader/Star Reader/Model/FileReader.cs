@@ -50,6 +50,7 @@ namespace Star_Reader.Model
                         break;
                 }
             }
+
             r.testForBabblingIdiot();
             return r;
         }//end StoreRecording
