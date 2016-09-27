@@ -159,7 +159,7 @@ namespace Star_Reader
                             default:
                                 btn1s.ToolTip = "Empty Space of " + td.Seconds + "." +
                                                 td.TotalMilliseconds.ToString().Substring(1) + " seconds.";
-                                btn1s.Background = Brushes.Crimson;
+                                btn1s.Background = (SolidColorBrush) new BrushConverter().ConvertFrom("#994d00");
                                 break;
                         }
                         PacketViewerA.Children.Add(btn1s);
@@ -198,7 +198,7 @@ namespace Star_Reader
                     }
                     else if (p.PacketEnd.Equals("EEP"))
                     {
-                        btn1.Background = Brushes.Red;
+                        btn1.Background = Brushes.Orange;
                         btn1.ToolTip = p.Time + "." + p.Time.ToString("fff") + "\n" + p.PacketType + "\n" + p.Payload +
                                        "\n" + p.PacketEnd;
                         btn1.Content = p.PacketEnd[0];
