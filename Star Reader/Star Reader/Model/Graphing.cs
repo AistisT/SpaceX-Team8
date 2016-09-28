@@ -26,7 +26,7 @@ namespace Star_Reader.Model
                             var removeWhitespace = currentPacket.Payload.Replace(" ", "");
                             dataRatePerMinute += removeWhitespace.Length/2;
                         }
-                        Console.WriteLine(x);
+                        //Console.WriteLine(x);
                         currentPacket = r.ListOfPackets[smallFileincrement];
 
                         smallFileincrement++;

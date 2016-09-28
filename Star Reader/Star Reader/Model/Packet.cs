@@ -86,7 +86,7 @@ namespace Star_Reader.Model
             return crc;
         }
 
-        private byte[] createByteArray(string x)
+        public byte[] createByteArray(string x)
         {
             x = x.Replace(" ", "");
             List<byte> z = new List<byte>();
@@ -129,7 +129,7 @@ namespace Star_Reader.Model
             return -1;
         }
 
-        private int convert24bitToint(byte a, byte b, byte c)
+        public int convert24bitToint(byte a, byte b, byte c)
         {
             int x = int.Parse(a.ToString(), System.Globalization.NumberStyles.HexNumber);
             int y = int.Parse(b.ToString(), System.Globalization.NumberStyles.HexNumber);
@@ -146,6 +146,19 @@ namespace Star_Reader.Model
                 {
                     if (bytes[i + 1].ToString().Equals("1"))
                     { return i * 3; }
+                }
+            }
+            return 0;
+        }
+
+        public int findStartOfPacket(string x)
+        {
+            byte[] bytes = createByteArray(x);
+            for (int i = 0; i < bytes.Length; i++)
+            {
+                if (int.Parse(bytes[i].ToString(), System.Globalization.NumberStyles.HexNumber) > 31)
+                {
+                    return (i * 3);
                 }
             }
             return 0;
