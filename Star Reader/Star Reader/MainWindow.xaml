@@ -9,7 +9,6 @@
         xmlns:local="clr-namespace:Star_Reader"
         mc:Ignorable="d"
         Title="Space Wire Reader" 
-         
         MinHeight="720"
         MinWidth="850"
         

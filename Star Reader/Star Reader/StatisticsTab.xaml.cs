@@ -21,11 +21,9 @@ namespace Star_Reader
         {
             InitializeComponent();
             InitialiseGraphs();
-            if (App.RecordingData.Count != 0)
-            {
-                CalculateDataForGougeCharts();
-                CalculateDataForCharts();
-            }
+            if (App.RecordingData.Count == 0) return;
+            CalculateDataForGougeCharts();
+            CalculateDataForCharts();
         }
 
         public int NrOfErrors { get; set; }
@@ -93,7 +91,7 @@ namespace Star_Reader
                 {
                     Content = recording.Port,
                     Background = Brushes.DarkBlue,
-                    Foreground = Brushes.White,
+                    Foreground = Brushes.White
                 };
                 button.Click += btn_click;
                 OpenPortPanel.Children.Add(button);
