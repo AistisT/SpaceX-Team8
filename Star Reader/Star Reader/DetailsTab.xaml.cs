@@ -339,10 +339,8 @@ namespace Star_Reader
                     var tabControl = Parent as ItemsControl;
                     tabControl.Items.Remove(this);
                     App.RecordingData.Remove(this.gData.Port);
-                    statTab.CalculateDataForGougeCharts();
-                    statTab.CalculateDataForCharts();
-
-                    statTab.ShowLoadedPorts();
+                    MainWindow mainWindow= (MainWindow)Application.Current.MainWindow;
+                    mainWindow.updateStatistics();
                 };
             closeButton.tabHeaderGrid.Children.Add(header);
             Header = closeButton;

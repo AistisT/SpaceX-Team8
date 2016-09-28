@@ -19,10 +19,10 @@ namespace Star_Reader
         {
             DataContext = new MainWindowViewModel();
             InitializeComponent();
-           
-            statisticsTab = new StatisticsTab(TabControl)
+
+            statisticsTab = new StatisticsTab()
             {
-               Name = "Statistics"
+                Name = "Statistics"
             };
             TabControl.AddToSource(statisticsTab);
         }
@@ -43,25 +43,50 @@ namespace Star_Reader
                 Recording r = fr.StoreRecording(file);
                 var name = "PortTab" + r.Port;
 
-                for (var i = TabControl.Items.Count; i > 0; i--)
+                var controlsList = TabablzControl.GetLoadedInstances();
+                foreach (var control in controlsList)
                 {
-                    TabItem item = (TabItem)TabControl.Items[i - 1];
-                    if (item.Name.Equals(name))
+                    for (var i = control.Items.Count; i > 0; i--)
                     {
-                        App.RecordingData.Remove(r.Port);
-                        TabControl.Items.Remove(item);
+                        TabItem item = (TabItem)control.Items[i - 1];
+                        if (item.Name.Equals(name))
+                        {
+                            App.RecordingData.Remove(r.Port);
+                            control.Items.Remove(item);
+                        }
                     }
                 }
                 App.RecordingData.Add(r.Port, r);
-                DetailsTab tab = new DetailsTab(r.Port,statisticsTab)
+                DetailsTab tab = new DetailsTab(r.Port, statisticsTab)
                 {
                     Name = name,
                 };
                 tab.SetHeader(new TextBlock { Text = "Port " + r.Port + '\u25BC' });
                 TabControl.AddToSource(tab);
-                statisticsTab.CalculateDataForGougeCharts();
-                statisticsTab.CalculateDataForCharts();
-                statisticsTab.ShowLoadedPorts();
+                updateStatistics();
+            }
+        }
+
+        public void updateStatistics()
+        {
+            var controlsList = TabablzControl.GetLoadedInstances();
+            foreach (var control in controlsList)
+            {
+                for (var i = control.Items.Count; i > 0; i--)
+                {
+                    StatisticsTab item = new StatisticsTab();
+                    try
+                    {
+                         item = (StatisticsTab)control.Items[i - 1];
+                    }
+                    catch (Exception e) { }
+                    if (item.Name.Equals("Statistics"))
+                    {
+                        item.CalculateDataForGougeCharts();
+                        item.CalculateDataForCharts();
+                        item.ShowLoadedPorts();
+                    }
+                }
             }
         }
 

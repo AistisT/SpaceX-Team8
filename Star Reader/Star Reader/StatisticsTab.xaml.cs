@@ -16,11 +16,9 @@ namespace Star_Reader
     public partial class StatisticsTab : TabItem, INotifyPropertyChanged
     {
         private Recording chartRecording;
-        private TabablzControl TabControl { get; set; }
 
-        public StatisticsTab(TabablzControl tabControl)
+        public StatisticsTab()
         {
-            this.TabControl = tabControl;
             InitializeComponent();
             InitialiseGraphs();
             if (App.RecordingData.Count != 0)
@@ -106,6 +104,23 @@ namespace Star_Reader
         {
             var b = (Button)sender;
             var x = b.Content.ToString();
+
+            var controlsList = TabablzControl.GetLoadedInstances();
+
+            foreach (var control in controlsList)
+            {
+                for (var i = control.Items.Count; i > 0; i--)
+                {
+                    TabItem item = (TabItem)control.Items[i - 1];
+                    if (item.Name.Equals("PortTab"+x))
+                    {
+                        control.SelectedItem = item;
+                        control.Focus();
+                        item.Focus();
+                    }
+                }
+            }
+
         }
 
         //InitialiseGraphs on right of screen
