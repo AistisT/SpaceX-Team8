@@ -7,8 +7,12 @@
          xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
        
          mc:Ignorable="d"
+         
+         MinHeight="720"
+         MinWidth="850"
+         
          Height="720"
-         Width="1280" >
+         Width="1280">
 
     <!--start grids-->
     <Grid>
@@ -49,7 +53,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="*" />
-                <RowDefinition Height="0.24*" />
+                <RowDefinition Height="0.3*" />
             </Grid.RowDefinitions>
                 
             <Label FontSize="16" Grid.Row="0" Grid.Column="0" FontWeight="Bold">Search</Label>
@@ -66,11 +70,13 @@
                     <DataGridTextColumn Header="Error Type" Binding="{Binding ErrorType}"></DataGridTextColumn>
                     <DataGridTextColumn Header="Packet End" Binding="{Binding PacketEnd}" Width="0.7*"></DataGridTextColumn>
                 </DataGrid.Columns>
+                
                 <DataGrid.ItemContainerStyle>
                     <Style TargetType="DataGridRow">
                         <EventSetter Event="MouseDoubleClick" Handler="Row_DoubleClick"/>
                     </Style>
                 </DataGrid.ItemContainerStyle>
+                
                 <DataGrid.CellStyle>
                     <Style TargetType="DataGridCell">
                         <Style.Triggers>
@@ -84,6 +90,10 @@
 
                             <DataTrigger Binding="{Binding PacketEnd}" Value="EOP">
                                 <Setter Property="Background" Value="#00dddd"/> <!--Blue-->
+                            </DataTrigger>
+
+                            <DataTrigger Binding="{Binding PacketEnd}" Value="EEP">
+                                <Setter Property="Background" Value="Orange"/>
                             </DataTrigger>
 
                             <DataTrigger Binding="{Binding PacketEnd}" Value="None">
@@ -122,13 +132,9 @@
                 <DockPanel ToolTip="Number of data characters" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2"  Grid.Column="2" Margin="0,0,0,30" >
                     <TextBlock  FontSize="14" Foreground="Black" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top"  Text="Number of data characters"/>
                 </DockPanel>
-                
-                <lvc:Gauge Grid.Column="0" Uses360Mode="False" From="0" To="{Binding packetValue}" Value="{Binding errValue}" 
-                           LabelFormatter="{Binding Formatter}" />
-                <lvc:Gauge Grid.Column="1" Uses360Mode="False" From="0" To="{Binding charValue}" Value="{Binding packetValue}" 
-                           LabelFormatter="{Binding Formatter1}" />
-                <lvc:Gauge Grid.Column="2" Uses360Mode="False" From="0" To="{Binding charValue}" Value="{Binding charValue}" 
-                           LabelFormatter="{Binding Formatter2}" />
+                <lvc:Gauge Grid.Column="0" Uses360Mode="False" From="0" To="{Binding NrOfPacketsTo }" Value="{Binding NrOfErrors}" />
+                <lvc:Gauge Grid.Column="1" Uses360Mode="False" From="0" To="{Binding NrOfCharactersTo }" Value="{Binding NrOfPackets}" />
+                <lvc:Gauge Grid.Column="2" Uses360Mode="False" From="0" To="{Binding NrOfCharactersTo}" Value="{Binding NrOfCharacters}" />
             </Grid>
             <!--Gauge end-->
 
@@ -151,7 +157,12 @@
                 <Rectangle ToolTip="Empty space over 1 second" Width="15" Height="15" Fill="#ffe699" Stroke="Black" StrokeThickness="2"></Rectangle>
                 <TextBlock  Padding="0,0,5,0" Text="-Empty space over 1 second"/>
             </StackPanel>
-                
+
+            <StackPanel Orientation="Horizontal">
+                <Rectangle ToolTip="Empty space over 5 second" Width="15" Height="15" Fill="#994d00" Stroke="Black" StrokeThickness="2"></Rectangle>
+                <TextBlock  Padding="0,0,5,0" Text="-Empty space over 5 second"/>
+            </StackPanel>
+
             <StackPanel Orientation="Horizontal" >
                 <Rectangle  ToolTip="Disconnect error" Width="15" Height="15" Fill="#ff3333" Stroke="Black" StrokeThickness="2"></Rectangle>
                 <TextBlock Padding="0,0,5,0" Text="-Disconnect error" />
@@ -161,12 +172,17 @@
                 <Rectangle ToolTip="Parity error" Width="15" Height="15" Fill="Yellow" Stroke="Black" StrokeThickness="2"></Rectangle>
                 <TextBlock Padding="0,0,5,0" Text="-Parity error"/>
             </StackPanel>
-                
+
+            <StackPanel Orientation="Horizontal">
+                <Rectangle ToolTip="EEP error" Width="15" Height="15" Fill="Orange" Stroke="Black" StrokeThickness="2"></Rectangle>
+                <TextBlock Padding="0,0,5,0" Text="-EEP error" />
+            </StackPanel>
+
             <StackPanel Orientation="Horizontal">
                 <Rectangle ToolTip="Packet not send" Width="15" Height="15" Fill="#ffaacc" Stroke="Black" StrokeThickness="2"></Rectangle>
                 <TextBlock Padding="0,0,5,0" Text="-Packet not send" />
             </StackPanel>
-                
+
         </WrapPanel>
         <!--packet description boxes end-->
             

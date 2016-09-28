@@ -17,9 +17,8 @@ namespace Star_Reader
     {
         private Recording chartRecording;
 
-        public StatisticsTab(TabablzControl tabControl)
+        public StatisticsTab()
         {
-            this.TabControl = tabControl;
             InitializeComponent();
             InitialiseGraphs();
             if (App.RecordingData.Count != 0)
@@ -29,11 +28,11 @@ namespace Star_Reader
             }
         }
 
-        private TabablzControl TabControl { get; set; }
-
-        public double NrOfErrors { get; set; }
-        public double NrOfPackets { get; set; }
-        public double NrOfCharacters { get; set; }
+        public int NrOfErrors { get; set; }
+        public int NrOfPackets { get; set; }
+        public int NrOfCharacters { get; set; }
+        public int NrOfPacketsTo { get; set; }
+        public int NrOfCharactersTo { get; set; }
         public SeriesCollection SeriesCollection { get; set; }
         public Func<double, string> Formatter { get; set; }
         public string[] Labels { get; set; }
@@ -56,10 +55,19 @@ namespace Star_Reader
                 NrOfPackets += recording.ListOfPackets.Count;
                 NrOfCharacters += recording.GetNumberOfCharacters();
             }
+            NrOfCharactersTo = NrOfCharacters;
+            NrOfPacketsTo = NrOfPackets;
+            if (NrOfCharacters == 0)
+                NrOfCharactersTo = 1;
+            if (NrOfPackets == 0)
+                NrOfPacketsTo = 1;
             DataContext = this;
             NotifyPropertyChanged("NrOfErrors");
             NotifyPropertyChanged("NrOfPackets");
             NotifyPropertyChanged("NrOfCharacters");
+            NotifyPropertyChanged("NrOfPacketsTo");
+            NotifyPropertyChanged("NrOfCharactersTo");
+
         }
 
         public void CalculateDataForCharts()
@@ -70,13 +78,13 @@ namespace Star_Reader
             ClearSeriesCollection();
             foreach (var recording in App.RecordingData.Values)
                 chartRecording.ListOfPackets.AddRange(recording.ListOfPackets);
-            if((bool) !DataRate.IsChecked)
-            DataRate.IsChecked = true;
+            if ((bool)!DataRate.IsChecked)
+                DataRate.IsChecked = true;
             else
-            GenerateDataRate();
+                GenerateDataRate();
         }
 
-        public void ShowLoadedPorts(int portNr)
+        public void ShowLoadedPorts()
         {
             OpenPortPanel.Children.Clear();
             foreach (var recording in App.RecordingData.Values)
@@ -86,7 +94,6 @@ namespace Star_Reader
                     Content = recording.Port,
                     Background = Brushes.DarkBlue,
                     Foreground = Brushes.White,
-
                 };
                 button.Click += btn_click;
                 OpenPortPanel.Children.Add(button);
@@ -97,6 +104,23 @@ namespace Star_Reader
         {
             var b = (Button)sender;
             var x = b.Content.ToString();
+
+            var controlsList = TabablzControl.GetLoadedInstances();
+
+            foreach (var control in controlsList)
+            {
+                for (var i = control.Items.Count; i > 0; i--)
+                {
+                    TabItem item = (TabItem)control.Items[i - 1];
+                    if (item.Name.Equals("PortTab"+x))
+                    {
+                        control.SelectedItem = item;
+                        control.Focus();
+                        item.Focus();
+                    }
+                }
+            }
+
         }
 
         //InitialiseGraphs on right of screen

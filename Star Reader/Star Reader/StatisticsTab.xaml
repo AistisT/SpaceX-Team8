@@ -8,7 +8,9 @@
          xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz"
          xmlns:dockablz="clr-namespace:Dragablz.Dockablz;assembly=Dragablz"
          mc:Ignorable="d"
-         Height="720" Width="1280">
+          
+         Height="720" 
+         Width="1280">
 
 
     <Grid>
@@ -16,20 +18,23 @@
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
+        
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="0.4*"/>
         </Grid.ColumnDefinitions>
+        
         <Grid Grid.Column="1"  HorizontalAlignment="Center">
             <Grid.RowDefinitions>
-                <RowDefinition Height="0.2*"></RowDefinition>
+                <RowDefinition Height="0.4*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
+            
             <Label FontSize="24" FontWeight="DemiBold" >Ports Currently Open</Label>
-            <StackPanel Margin="10,10,10,10" Grid.Row="1" Name="OpenPortPanel" Width="auto"></StackPanel>
+            <StackPanel Margin="10,0,10,0" Grid.Row="1" Name="OpenPortPanel" Width="auto"></StackPanel>
         </Grid>
 
-        <!--Gauge start (bottom right)-->
+        <!--Gauge start (Top Left)-->
         <Grid Grid.Row="0" Grid.Column="0">
 
             <Grid.ColumnDefinitions>
@@ -51,11 +56,12 @@
                 <TextBlock FontSize="14" Foreground="Black" FontWeight="Bold" ToolTip="Number of data characters" HorizontalAlignment="Center" VerticalAlignment="Top"  Text="Number of data characters"/>
             </DockPanel>
 
-            <lvc:Gauge Grid.Column="0" Uses360Mode="False" From="0" To="{Binding NrOfPackets}" Value="{Binding NrOfErrors}" />
-            <lvc:Gauge Grid.Column="1" Uses360Mode="False" From="0" To="{Binding NrOfCharacters}" Value="{Binding NrOfPackets}" />
-            <lvc:Gauge Grid.Column="2" Uses360Mode="False" From="0" To="{Binding NrOfCharacters}" Value="{Binding NrOfCharacters}" />
+            <lvc:Gauge Grid.Column="0" Uses360Mode="False" From="0" To="{Binding NrOfPacketsTo }" Value="{Binding NrOfErrors}" />
+            <lvc:Gauge Grid.Column="1" Uses360Mode="False" From="0" To="{Binding NrOfCharactersTo }" Value="{Binding NrOfPackets}" />
+            <lvc:Gauge Grid.Column="2" Uses360Mode="False" From="0" To="{Binding NrOfCharactersTo}" Value="{Binding NrOfCharacters}" />
         </Grid>
         <!--Gauge end-->
+        
         <!--Chart start (bottom left)-->
         <Grid Grid.Row="1" Grid.Column="0" ColumnSpan="2">
             <Grid.RowDefinitions>
