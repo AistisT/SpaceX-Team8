@@ -43,7 +43,6 @@ namespace Star_Reader.Model
             {
                 DataStartPoint = DataStartPoint.AddSeconds(timeInterval);
                 DataEndPoint = DataEndPoint.AddSeconds(timeInterval);
-                //Console.WriteLine(i);
                 int packets = 0;
                 for(int j=0;j<ListOfPackets.Count;j++)
                 {
@@ -107,6 +106,90 @@ namespace Star_Reader.Model
                 {
                     ListOfPackets[idiots[k]].ErrorType += "Babbling Idiot Detected";
                     ErrorsPresent++;
+                }
+            }
+        }
+
+        public int findcounter()
+        {
+            List<int> possiblecounters = new List<int>();
+            List<int> possiblepossibles = new List<int>();
+            List<int> templist = new List<int>();
+            //if(possiblecounters.Count!=1)
+            for (int i = 0; i < ListOfPackets.Count() - 1; i++)
+            {
+                Packet a = ListOfPackets[i];
+                Packet b = ListOfPackets[i + 1];
+
+                if (a.Payload != null && b.Payload != null && possiblecounters.Count != 1)
+                {
+                    int aStart = a.findStartOfPacket(a.Payload);
+                    int bStart = b.findStartOfPacket(b.Payload);
+                    byte[] byteArrayA = a.createByteArray(a.Payload.Substring(aStart));
+                    byte[] byteArrayB = b.createByteArray(b.Payload.Substring(bStart));
+                    if (byteArrayA.Length == byteArrayB.Length)
+                    {
+                        for (int j = 0; j < byteArrayA.Length - 1; j++)
+                        {
+                                int x = a.convert24bitToint(00, byteArrayA[j], byteArrayA[j + 1]) -
+                            a.convert24bitToint(00, byteArrayB[j], byteArrayB[j + 1]);
+                            if (x < 0 && x >-255)
+                            {
+                                if (possiblepossibles.Contains(j) == false)
+                                { possiblepossibles.Add(j); }
+                            }
+                        }
+                        if(possiblecounters.Count==0)
+                            {
+                            possiblecounters.Clear();
+                            for (int y = 0; y < possiblepossibles.Count; y++)
+                            {
+                                possiblecounters.Add(possiblepossibles[y]);
+                            }
+                        }
+                            //Console.WriteLine(possiblecounters.Count);
+                        for (int k = 0; k < possiblepossibles.Count; k++)
+                        {
+                            if (possiblecounters.Contains(possiblepossibles[k]))
+                            {
+                                templist.Add(possiblepossibles[k]);
+                            }  
+                        }
+                            //if(i==8)Console.WriteLine(templist[0]+ " " + templist[1]);
+                        possiblecounters.Clear();
+                        for(int x=0; x<templist.Count;x++)
+                        {
+                            possiblecounters.Add(templist[x]);
+                        }
+                            possiblepossibles.Clear();
+                            templist.Clear();
+                    }
+                }
+            }
+            Console.WriteLine("possible indexes: "+ possiblecounters[0]);
+            return possiblecounters[0];
+        }
+        public void findoutofsequencepackets()
+        {
+            int counterloc = findcounter();
+            for(int i=0;i<ListOfPackets.Count-1;i++)
+            {
+                Packet a = ListOfPackets[i];
+                Packet b = ListOfPackets[i + 1];
+
+                if (a.Payload != null && b.Payload != null)
+                {
+                    int aStart = a.findStartOfPacket(a.Payload);
+                    int bStart = b.findStartOfPacket(b.Payload);
+                    byte[] byteArrayA = a.createByteArray(a.Payload.Substring(aStart));
+                    byte[] byteArrayB = b.createByteArray(b.Payload.Substring(bStart));
+                    if(byteArrayA.Length==byteArrayB.Length)
+                    if (a.convert24bitToint(00, byteArrayA[counterloc], byteArrayA[counterloc + 1]) -
+                        a.convert24bitToint(00, byteArrayB[counterloc], byteArrayB[counterloc + 1]) == 1)
+                    {
+                        b.ErrorType += "Out of Sequence";
+                        ErrorsPresent++;
+                    }
                 }
             }
         }

@@ -52,6 +52,8 @@ namespace Star_Reader.Model
             }
 
             r.testForBabblingIdiot();
+            //r.findcounter();
+            r.findoutofsequencepackets();
             return r;
         }//end StoreRecording
     }
