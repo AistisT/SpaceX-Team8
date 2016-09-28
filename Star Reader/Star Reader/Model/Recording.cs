@@ -14,6 +14,8 @@ namespace Star_Reader.Model
         public DateTime PacketEndTime { get; set; }
         public int Port { get; set; }
         public int ErrorsPresent { get; set; }
+        public int HeaderLength { get; set; }
+        public int DataLength { get; set; }
 
         public Recording()
         {
@@ -123,8 +125,8 @@ namespace Star_Reader.Model
 
                 if (a.Payload != null && b.Payload != null && possiblecounters.Count != 1)
                 {
-                    int aStart = a.findStartOfPacket(a.Payload);
-                    int bStart = b.findStartOfPacket(b.Payload);
+                    int aStart = a.findStartOfPacket();
+                    int bStart = b.findStartOfPacket();
                     byte[] byteArrayA = a.createByteArray(a.Payload.Substring(aStart));
                     byte[] byteArrayB = b.createByteArray(b.Payload.Substring(bStart));
                     if (byteArrayA.Length == byteArrayB.Length)
@@ -179,8 +181,8 @@ namespace Star_Reader.Model
 
                 if (a.Payload != null && b.Payload != null)
                 {
-                    int aStart = a.findStartOfPacket(a.Payload);
-                    int bStart = b.findStartOfPacket(b.Payload);
+                    int aStart = a.findStartOfPacket();
+                    int bStart = b.findStartOfPacket();
                     byte[] byteArrayA = a.createByteArray(a.Payload.Substring(aStart));
                     byte[] byteArrayB = b.createByteArray(b.Payload.Substring(bStart));
                     if(byteArrayA.Length==byteArrayB.Length)
@@ -189,6 +191,48 @@ namespace Star_Reader.Model
                     {
                         b.ErrorType += "Out of Sequence";
                         ErrorsPresent++;
+                    }
+                }
+            }
+        }
+        public void findHeaderLength()
+        {
+            for(int i=0;i<ListOfPackets.Count;i++)
+            {
+                Packet p = ListOfPackets[i];
+                if (HeaderLength==0 && p.Payload!=null)
+                {
+                    int startofpacket = p.findStartOfPacket();
+                    HeaderLength = p.findHeaderEnd();
+                    //Console.WriteLine(p.Payload.Substring(p.findStartOfPacket(); + HeaderLength + 1));
+                }
+            }
+        }
+        public void findDataLength()
+        {
+            for (int i = 0; i < ListOfPackets.Count; i++)
+            {
+                Packet p = ListOfPackets[i];
+                if (DataLength == 0 && p.Payload != null && HeaderLength!=0)
+                {
+                    int startofpacket = p.findStartOfPacket();
+                    DataLength = p.Payload.Substring(p.findStartOfPacket() + HeaderLength + 1).Length;
+                    //Console.WriteLine(p.Payload.Substring(p.findStartOfPacket() + HeaderLength + 1));
+                    Console.WriteLine(p.Payload.Substring(p.Payload.Length-DataLength));
+                    Console.WriteLine(startofpacket + " " + HeaderLength + " " + DataLength + 1 + ": " + p.Payload.Length);
+                }
+            }
+        }
+        public void CheckDataLengths()
+        {
+            for (int i = 0; i < ListOfPackets.Count; i++)
+            {
+                Packet p = ListOfPackets[i];
+                if (DataLength != 0 && p.Payload != null && HeaderLength != 0)
+                {
+                    if(p.findStartOfPacket() + HeaderLength + DataLength + 1 == p.Payload.Length==false)
+                    {
+                        p.ErrorType += "Incorrect Data Length";
                     }
                 }
             }

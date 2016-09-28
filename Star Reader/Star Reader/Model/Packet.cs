@@ -42,10 +42,10 @@ namespace Star_Reader.Model
 
         public void CheckRMAP()
         {
-            if (isRMAP(Payload))
+            if (isRMAP())
             {
-                int dataLength = findDataLength(Payload);
-                int headerstart = findStartOfRMAP(Payload);
+                int dataLength = findDataLength();
+                int headerstart = findStartOfRMAP();
                 if (dataLength == 0)
                 {
                     byte payloadcrc = ComputeChecksum(createByteArray(Payload.Substring(headerstart)));
@@ -98,9 +98,9 @@ namespace Star_Reader.Model
             return z.ToArray();
         }
 
-        private bool isRMAP(string x)
+        private bool isRMAP()
         {
-            byte[] bytes = createByteArray(x);
+            byte[] bytes = createByteArray(Payload);
             for (int i = 0; i < bytes.Length; i++)
             {
                 if (int.Parse(bytes[i].ToString(), System.Globalization.NumberStyles.HexNumber) > 31)
@@ -114,9 +114,9 @@ namespace Star_Reader.Model
             return false;
         }
 
-        private int findDataLength(string x)
+        private int findDataLength()
         {
-            byte[] ba = createByteArray(x);
+            byte[] ba = createByteArray(Payload);
             for (int i = 0; i < ba.Length - 2; i++)
             {
                 int possibleDataLength = convert24bitToint(ba[i], ba[i + 1], ba[i + 2]);
@@ -138,9 +138,9 @@ namespace Star_Reader.Model
             return (c + (b * 256) + (a * 65536));
         }
 
-        private int findStartOfRMAP(string x)
+        private int findStartOfRMAP()
         {
-            byte[] bytes = createByteArray(x);
+            byte[] bytes = createByteArray(Payload);
             for (int i = 0; i < bytes.Length; i++)
             {
                 if (int.Parse(bytes[i].ToString(), System.Globalization.NumberStyles.HexNumber) > 31)
@@ -152,9 +152,9 @@ namespace Star_Reader.Model
             return 0;
         }
 
-        public int findStartOfPacket(string x)
+        public int findStartOfPacket()
         {
-            byte[] bytes = createByteArray(x);
+            byte[] bytes = createByteArray(Payload);
             for (int i = 0; i < bytes.Length; i++)
             {
                 if (int.Parse(bytes[i].ToString(), System.Globalization.NumberStyles.HexNumber) > 31)
@@ -163,6 +163,20 @@ namespace Star_Reader.Model
                 }
             }
             return 0;
+        }
+
+        public int findHeaderEnd()
+        {
+            byte[] ba = createByteArray(Payload.Substring(findStartOfPacket()));
+            for (int i = 0; i < ba.Length - 2; i++)
+            {
+                int possibleDataLength = convert24bitToint(ba[i], ba[i + 1], ba[i + 2]);
+                if (i + 5 + possibleDataLength == ba.Length && possibleDataLength!=0)
+                {
+                    return ((i+4)*3-1);
+                }
+            }
+            return -1;
         }
     }
 }
