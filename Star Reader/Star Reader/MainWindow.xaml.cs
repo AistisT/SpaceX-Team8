@@ -57,7 +57,7 @@ namespace Star_Reader
                     }
                 }
                 App.RecordingData.Add(r.Port, r);
-                DetailsTab tab = new DetailsTab(r.Port, statisticsTab)
+                DetailsTab tab = new DetailsTab(r.Port)
                 {
                     Name = name,
                 };

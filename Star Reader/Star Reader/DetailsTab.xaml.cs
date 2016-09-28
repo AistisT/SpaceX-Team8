@@ -21,21 +21,22 @@ namespace Star_Reader
         private string filterString;
         private Recording gData;
 
-        private StatisticsTab statTab;
-
         //Constructor
-        public DetailsTab(int portNr, StatisticsTab statTab)
+        public DetailsTab(int portNr)
         {
-            this.statTab = statTab;
             InitializeComponent();
+
             PopulateOverview(portNr);
             initialiseGauge();
             DataGridCollection = CollectionViewSource.GetDefaultView(App.RecordingData[portNr].ListOfPackets);
             DataGridCollection.Filter = Filter;
+            this.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+            this.Arrange(new Rect(0, 0, this.DesiredSize.Width, this.DesiredSize.Height));
             InitialiseTimeStamps();
 
             DataContext = this;
         }
+
 
         public string[] Labels { get; set; }
 
@@ -358,6 +359,11 @@ namespace Star_Reader
          */
         public void InitialiseTimeStamps()
         {
+
+            double panelWidth = PacketViewerA.ActualWidth;
+            Button button = VisualTreeHelper.GetChild(PacketViewerA, 0) as Button;
+            double buttonWidth = button.ActualWidth;
+            //int numberOfButtonsPerRow = (int)panelWidth / (int)buttonWidth;
             //InitialLabel.Margin = new Thickness(0, 0, 0, 0); //Left, top, right, bottom
 
             //int childrenCount = VisualTreeHelper.GetChildrenCount(TimeStamps);
@@ -367,7 +373,9 @@ namespace Star_Reader
 
             //int childrenCount2 = VisualTreeHelper.GetChildrenCount(TimeStamps);
 
-            var contain2 = VisualTreeHelper.GetChild(PacketViewerA, 0) as Button;
+
+            Button contain3 = VisualTreeHelper.GetChild(PacketViewerA, numberOfButtonsPerRow+1) as Button;
+            Point currentPoint = contain3.TransformToAncestor(PacketViewerA).Transform(new Point(0, 0));
             //Button contain3 = VisualTreeHelper.GetChild(PacketViewerA, 1) as Button;
             //UIElement container2 = VisualTreeHelper.GetParent(contain2) as UIElement;
             //Point relativeLocation = contain2.TranslatePoint(new Point(0, yPlus), container2);
@@ -403,7 +411,8 @@ namespace Star_Reader
             //Point position = contain2.PointToScreen(new Point(0d, 0d));
 
             string str2 = null;
-            str2 = contain2.ToolTip as string;
+            str2 = button.ToolTip as string;
+            string str3 = contain3.ToolTip as string;
 
             var Lbl1 = new Label
             {
@@ -413,8 +422,17 @@ namespace Star_Reader
                 Content = str2.Substring(11, 12)
                 //Content = position
             };
+            var Lbl2 = new Label
+            {
+                Height = 20,
+                FontSize = 9,
+                //Content = contain2.ToolTip
+                Content = str3.Substring(11, 12)
+                //Content = position
+            };
 
             TimeStamps.Children.Add(Lbl1);
+            TimeStamps.Children.Add(Lbl2);
 
             //}
             //else
@@ -422,5 +440,23 @@ namespace Star_Reader
             //do nothing
             //}
         } //End of InitialiseTimeStamps
+
+        private static int GetNumberOfItemsInFirstRow(ItemsControl itemsControl)
+        {
+            double previousX = -1;
+            int itemIndex;
+
+            for (itemIndex = 0; itemIndex < itemsControl.Items.Count; itemIndex++)
+            {
+                var container = (UIElement)itemsControl.ItemContainerGenerator.ContainerFromIndex(itemIndex);
+                var x = container.TranslatePoint(new Point(), itemsControl).X;
+                if (x <= previousX)
+                {
+                    break;
+                }
+                previousX = x;
+            }
+            return itemIndex;
+        }
     }
 }
