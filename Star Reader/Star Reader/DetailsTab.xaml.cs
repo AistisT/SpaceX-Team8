@@ -363,7 +363,7 @@ namespace Star_Reader
             double panelWidth = PacketViewerA.ActualWidth;
             Button button = VisualTreeHelper.GetChild(PacketViewerA, 0) as Button;
             double buttonWidth = button.ActualWidth;
-            //int numberOfButtonsPerRow = (int)panelWidth / (int)buttonWidth;
+            int numberOfButtonsPerRow = 2;// (int)panelWidth / (int)buttonWidth;
             //InitialLabel.Margin = new Thickness(0, 0, 0, 0); //Left, top, right, bottom
 
             //int childrenCount = VisualTreeHelper.GetChildrenCount(TimeStamps);
