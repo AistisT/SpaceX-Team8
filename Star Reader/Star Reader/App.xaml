@@ -1,6 +1,7 @@
 ﻿<Application x:Class="Star_Reader.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             DispatcherUnhandledException="Application_DispatcherUnhandledException"
              StartupUri="MainWindow.xaml"
              xmlns:system="clr-namespace:System;assembly=mscorlib">
     <Application.Resources>
