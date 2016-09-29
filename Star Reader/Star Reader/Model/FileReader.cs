@@ -52,8 +52,10 @@ namespace Star_Reader.Model
             }
 
             r.testForBabblingIdiot();
-            //r.findcounter();
             r.findoutofsequencepackets();
+            r.findHeaderLength();
+            r.findDataLength();
+            r.CheckDataLengths();
             return r;
         }//end StoreRecording
     }
