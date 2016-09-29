@@ -92,7 +92,7 @@ namespace Star_Reader.Model
             if (idiots.Count == 0) return;
             for (var k = 0; k < idiots.Count(); k++)
             {
-                ListOfPackets[idiots[k]].ErrorType += "Babbling Idiot Detected";
+                ListOfPackets[idiots[k]].ErrorType += "Babbling Idiot Detected. ";
                 ErrorsPresent++;
             }
         }
@@ -151,18 +151,20 @@ namespace Star_Reader.Model
                 var a = ListOfPackets[i];
                 var b = ListOfPackets[i + 1];
 
-                if ((a.Payload == null) || (b.Payload == null)) continue;
-                var aStart = a.FindStartOfPacket();
-                var bStart = b.FindStartOfPacket();
-                var byteArrayA = a.CreateByteArray(a.Payload.Substring(aStart));
-                var byteArrayB = b.CreateByteArray(b.Payload.Substring(bStart));
-                if (byteArrayA.Length == byteArrayB.Length)
-                    if (a.Convert24BitToint(00, byteArrayA[counterloc], byteArrayA[counterloc + 1]) -
-                        a.Convert24BitToint(00, byteArrayB[counterloc], byteArrayB[counterloc + 1]) == 1)
-                    {
-                        b.ErrorType += "Out of Sequence";
-                        ErrorsPresent++;
-                    }
+                if ((a.Payload != null) && (b.Payload != null))
+                {
+                    var aStart = a.FindStartOfPacket();
+                    var bStart = b.FindStartOfPacket();
+                    var byteArrayA = a.CreateByteArray(a.Payload.Substring(aStart));
+                    var byteArrayB = b.CreateByteArray(b.Payload.Substring(bStart));
+                    if (byteArrayA.Length == byteArrayB.Length)
+                        if (a.Convert24BitToint(00, byteArrayA[counterloc], byteArrayA[counterloc + 1]) -
+                            a.Convert24BitToint(00, byteArrayB[counterloc], byteArrayB[counterloc + 1]) == 1)
+                        {
+                            b.ErrorType += "Out of Sequence. ";
+                            ErrorsPresent++;
+                        }
+                }
             }
         }
 
@@ -196,7 +198,7 @@ namespace Star_Reader.Model
             {
                 if ((DataLength == 0) || (p.Payload == null) || (HeaderLength == 0)) continue;
                 if (p.FindStartOfPacket() + HeaderLength + DataLength + 1 == p.Payload.Length == false)
-                    p.ErrorType += "Incorrect Data Length";
+                    p.ErrorType += "Incorrect Data Length. ";
             }
         }
     }
