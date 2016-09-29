@@ -42,8 +42,6 @@ namespace Star_Reader
             _resizeTimer.Tick += ResizeStopped;
         }
 
-        public string[] Labels { get; set; }
-
         public ICollectionView DataGridCollection
         {
             get { return _dataGridCollection; }
@@ -73,18 +71,21 @@ namespace Star_Reader
         public int NrOfCharactersTo { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
 
+        //Raise notify event
         private void NotifyPropertyChanged(string property)
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(property));
         }
 
+        //Refresh Data Grid after Filter
         private void FilterCollection()
         {
             if (_dataGridCollection != null)
                 _dataGridCollection.Refresh();
         }
 
+        // Filter data grid
         public bool Filter(object obj)
         {
             var packet = obj as Packet;
@@ -112,6 +113,7 @@ namespace Star_Reader
                         _filterString, CompareOptions.IgnoreCase) >= 0);
         }
 
+        // data grid row double click
         private void Row_DoubleClick(object sender, MouseButtonEventArgs e)
         {
             var packet = DetailedViewerA.SelectedItem;
@@ -256,7 +258,7 @@ namespace Star_Reader
             FocusManager.SetFocusedElement(selectedRow, selectedRow);
         }
 
-        //InitialiseGraphs on right of screen
+        // Charts data container
         private void InitialiseGraphs()
         {
             SeriesCollection = new SeriesCollection
@@ -312,13 +314,13 @@ namespace Star_Reader
                 {
                     Title = "Total Errors",
                     Values = new ChartValues<double>(),
-
                 }
             };
 
             DataRate.IsChecked = true;
         } //End of InitialiseGraphs
 
+        //Checkbox
         private void DataRate_Checked(object sender, RoutedEventArgs e)
         {
             var getPlots = new Graphing();
@@ -328,11 +330,13 @@ namespace Star_Reader
                 SeriesCollection[0].Values.Add(plot);
         }
 
+        //Checkbox
         private void DataRate_Unchecked(object sender, RoutedEventArgs e)
         {
             SeriesCollection[0].Values.Clear();
         }
 
+        //Checkbox
         private void Errors_Checked(object sender, RoutedEventArgs e)
         {
             var getBars = new Graphing();
@@ -347,6 +351,7 @@ namespace Star_Reader
             SeriesCollection[8].Values.Add(bars[7]);
         }
 
+        //Checkbox
         private void Errors_Unchecked(object sender, RoutedEventArgs e)
         {
             SeriesCollection[1].Values.Clear();
@@ -359,6 +364,7 @@ namespace Star_Reader
             SeriesCollection[8].Values.Clear();
         }
 
+        // Initialise gouge charts
         private void InitialiseGauge()
         {
             NrOfErrors = _gData.ErrorsPresent;
@@ -379,11 +385,11 @@ namespace Star_Reader
             NotifyPropertyChanged("NrOfCharactersTo");
         }
 
+        // Create tab item header, for close button
         public void SetHeader(UIElement header)
         {
             var closeButton = new CloseButton();
-            closeButton.Click +=
-                (sender, e) =>
+            closeButton.Click +=(sender, e) =>
                 {
                     var tabControl = Parent as ItemsControl;
                     tabControl?.Items.Remove(this);
@@ -395,6 +401,7 @@ namespace Star_Reader
             Header = closeButton;
         }
 
+        // Generate timeline for overview
         public void GenerateTimeStamps()
         {
             var panelWidth = PacketViewerA.ActualWidth;
@@ -427,8 +434,9 @@ namespace Star_Reader
                 };
                 TimeStamps.Children.Add(label);
             }
-        } //End of InitialiseTimeStamps
+        } 
 
+        // Clear existing timeline
         private void ClearTimeStamps()
         {
             var timestamps = from UIElement timestamp in TimeStamps.Children where timestamp is Label select timestamp;
@@ -440,11 +448,13 @@ namespace Star_Reader
             }
         }
 
+        //Timeline container on load
         private void PacketViewerA_OnLoaded(object sender, RoutedEventArgs e)
         {
             GenerateTimeStamps();
         }
 
+        //Timeline container resize stopped
         private void ResizeStopped(object sender, EventArgs e)
         {
             _resizeTimer.IsEnabled = false;
@@ -452,6 +462,7 @@ namespace Star_Reader
             GenerateTimeStamps();
         }
 
+        //Timeline container on resize event
         private void PacketViewerA_OnSizeChanged(object sender, SizeChangedEventArgs e)
         {
             _resizeTimer.IsEnabled = true;

@@ -34,12 +34,14 @@ namespace Star_Reader
         public string[] Labels { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
 
+        //Raise notify event
         private void NotifyPropertyChanged(string property)
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(property));
         }
 
+        //Get data for gouge chart
         public void CalculateDataForGougeCharts()
         {
             NrOfErrors = 0;
@@ -65,6 +67,7 @@ namespace Star_Reader
             NotifyPropertyChanged("NrOfCharactersTo");
         }
 
+        //Initiate Date Rate chart
         public void CalculateDataForCharts()
         {
             DataContext = this;
@@ -79,6 +82,7 @@ namespace Star_Reader
                 GenerateDataRate();
         }
 
+        // Show currently open ports
         public void ShowLoadedPorts()
         {
             OpenPortPanel.Children.Clear();
@@ -95,6 +99,7 @@ namespace Star_Reader
             }
         }
 
+        //Open port buton on click
         protected void btn_click(object sender, EventArgs e)
         {
             var b = (Button) sender;
@@ -113,7 +118,7 @@ namespace Star_Reader
                 }
         }
 
-        //InitialiseGraphs on right of screen
+        // Chart data container
         private void InitialiseGraphs()
         {
             SeriesCollection = new SeriesCollection
@@ -172,13 +177,15 @@ namespace Star_Reader
 
                 }
             };
-        } //End of InitializeGraphs
+        } 
 
+        //Checkbox
         private void DataRate_Checked(object sender, RoutedEventArgs e)
         {
             GenerateDataRate();
         }
 
+        //Generate data rate plot
         private void GenerateDataRate()
         {
             var getPlots = new Graphing();
@@ -190,11 +197,13 @@ namespace Star_Reader
                 SeriesCollection[0].Values.Add(plot);
         }
 
+        //Checkbox
         private void DataRate_Unchecked(object sender, RoutedEventArgs e)
         {
             SeriesCollection[0].Values.Clear();
         }
 
+        //Checkbox
         private void Errors_Checked(object sender, RoutedEventArgs e)
         {
             var getBars = new Graphing();
@@ -210,6 +219,7 @@ namespace Star_Reader
             SeriesCollection[8].Values.Add(bars[7]);
         }
 
+        //Checkbox
         private void Errors_Unchecked(object sender, RoutedEventArgs e)
         {
             SeriesCollection[1].Values.Clear();
@@ -222,6 +232,7 @@ namespace Star_Reader
             SeriesCollection[8].Values.Clear();
         }
 
+        //Clean chart data
         private void ClearSeriesCollection()
         {
             foreach (var collection in SeriesCollection)

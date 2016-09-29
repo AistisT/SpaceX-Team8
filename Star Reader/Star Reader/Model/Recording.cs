@@ -26,6 +26,10 @@ namespace Star_Reader.Model
                 ErrorsPresent++;
         }
 
+        /// <summary>
+        ///  Get data rate
+        /// </summary>
+        /// <returns></returns>
         public List<double> GetDataRates()
         {
             const int timeInterval = 60;
@@ -94,7 +98,11 @@ namespace Star_Reader.Model
             }
         }
 
-        public int Findcounter()
+        /// <summary>
+        /// Find counter
+        /// </summary>
+        /// <returns></returns>
+        public int FindCounter()
         {
             var possiblecounters = new List<int>();
             var possiblepossibles = new List<int>();
@@ -140,9 +148,12 @@ namespace Star_Reader.Model
             return possiblecounters[0];
         }
 
-        public void Findoutofsequencepackets()
+        /// <summary>
+        /// Find out of sequence packets
+        /// </summary>
+        public void FindOutOSequencePackets()
         {
-            var counterloc = Findcounter();
+            var counterloc = FindCounter();
             for (var i = 0; i < ListOfPackets.Count - 1; i++)
             {
                 var a = ListOfPackets[i];
@@ -160,7 +171,9 @@ namespace Star_Reader.Model
                 ErrorsPresent++;
             }
         }
-
+        /// <summary>
+        /// Find packet header
+        /// </summary>
         public void FindHeaderLength()
         {
             foreach (var p in ListOfPackets)
@@ -172,6 +185,9 @@ namespace Star_Reader.Model
             }
         }
 
+        /// <summary>
+        /// Find packet data length
+        /// </summary>
         public void FindDataLength()
         {
             foreach (var p in ListOfPackets)
@@ -185,6 +201,9 @@ namespace Star_Reader.Model
             }
         }
 
+        /// <summary>
+        /// Check packet data length
+        /// </summary>
         public void CheckDataLengths()
         {
             foreach (var p in ListOfPackets)

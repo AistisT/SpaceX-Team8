@@ -6,6 +6,7 @@ namespace Star_Reader.Model
     {
         public MainWindowViewModel()
         {
+            //Host window for dragable tabs
             InterTabClient = new TabHostInterTabClient();
         }
 

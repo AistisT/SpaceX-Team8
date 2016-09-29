@@ -60,6 +60,7 @@ namespace Star_Reader
             }
         }
 
+        //Update statistics tab
         public void UpdateStatistics()
         {
             var controlsList = TabablzControl.GetLoadedInstances();

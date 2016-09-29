@@ -5,6 +5,11 @@ namespace Star_Reader.Model
 {
     public class FileReader
     {
+        /// <summary>
+        /// Process recording file
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public Recording StoreRecording(string path)
         {
             var lines = File.ReadAllLines(path);
@@ -43,7 +48,7 @@ namespace Star_Reader.Model
             }
 
             r.TestForBabblingIdiot();
-            r.Findoutofsequencepackets();
+            r.FindOutOSequencePackets();
             r.FindHeaderLength();
             r.FindDataLength();
             r.CheckDataLengths();

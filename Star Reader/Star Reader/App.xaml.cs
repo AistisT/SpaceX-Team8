@@ -9,6 +9,7 @@ namespace Star_Reader
     /// </summary>
     public partial class App : Application
     {
+        // Dictionary to hold open ports data
         public static Dictionary<int, Recording> RecordingData = new Dictionary<int, Recording>();
     }
 }

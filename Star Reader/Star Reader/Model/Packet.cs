@@ -47,6 +47,10 @@ namespace Star_Reader.Model
         public string ErrorType { get; set; }
         public string PacketEnd { get; set; }
 
+        /// <summary>
+        /// Get number of bytes in the packet
+        /// </summary>
+        /// <returns></returns>
         public int GetNumberOfBytes()
         {
             var bytes = 0;
@@ -56,6 +60,9 @@ namespace Star_Reader.Model
             return bytes;
         }
 
+        /// <summary>
+        /// Perform RMAP on the packet
+        /// </summary>
         public void CheckRMAP()
         {
             if (!IsRMAP()) return;
@@ -82,6 +89,11 @@ namespace Star_Reader.Model
             }
         }
 
+        /// <summary>
+        /// Generate crc checksum
+        /// </summary>
+        /// <param name="bytes"></param>
+        /// <returns></returns>
         public static byte ComputeChecksum(params byte[] bytes)
         {
             byte crc = 0;
@@ -91,6 +103,11 @@ namespace Star_Reader.Model
             return crc;
         }
 
+        /// <summary>
+        /// Create byte aray for the payload
+        /// </summary>
+        /// <param name="x"></param>
+        /// <returns></returns>
         public byte[] CreateByteArray(string x)
         {
             x = x.Replace(" ", "");
@@ -100,6 +117,10 @@ namespace Star_Reader.Model
             return z.ToArray();
         }
 
+        /// <summary>
+        /// Check RMAP
+        /// </summary>
+        /// <returns></returns>
         private bool IsRMAP()
         {
             var bytes = CreateByteArray(Payload);
@@ -109,6 +130,10 @@ namespace Star_Reader.Model
             return false;
         }
 
+        /// <summary>
+        /// GEt payload data length
+        /// </summary>
+        /// <returns></returns>
         private int FindDataLength()
         {
             var ba = CreateByteArray(Payload);
@@ -122,6 +147,13 @@ namespace Star_Reader.Model
             return -1;
         }
 
+        /// <summary>
+        /// Convert 24 bit to int
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <param name="c"></param>
+        /// <returns></returns>
         public int Convert24BitToint(byte a, byte b, byte c)
         {
             var x = int.Parse(a.ToString(), NumberStyles.HexNumber);
@@ -130,6 +162,10 @@ namespace Star_Reader.Model
             return z + y*256 + x*65536;
         }
 
+        /// <summary>
+        /// Find start of RMAP
+        /// </summary>
+        /// <returns></returns>
         private int FindStartOfRmap()
         {
             var bytes = CreateByteArray(Payload);
@@ -140,6 +176,10 @@ namespace Star_Reader.Model
             return 0;
         }
 
+        /// <summary>
+        /// Find start of the packet
+        /// </summary>
+        /// <returns></returns>
         public int FindStartOfPacket()
         {
             var bytes = CreateByteArray(Payload);
@@ -149,6 +189,10 @@ namespace Star_Reader.Model
             return 0;
         }
 
+        /// <summary>
+        /// Find header end
+        /// </summary>
+        /// <returns></returns>
         public int FindHeaderEnd()
         {
             var ba = CreateByteArray(Payload.Substring(FindStartOfPacket()));

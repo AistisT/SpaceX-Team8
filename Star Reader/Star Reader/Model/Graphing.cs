@@ -5,6 +5,11 @@ namespace Star_Reader.Model
 {
     public class Graphing
     {
+        /// <summary>
+        /// Generate data for data rate chart
+        /// </summary>
+        /// <param name="r"></param>
+        /// <returns></returns>
         public List<double> GetPlots(Recording r)
         {
             var dataRatePerMinute = 0;
@@ -58,6 +63,11 @@ namespace Star_Reader.Model
             return plot;
         } //end getPlots
 
+        /// <summary>
+        /// Generate data for bar chart
+        /// </summary>
+        /// <param name="r"></param>
+        /// <returns></returns>
         public List<double> GetBars(Recording r)
         {
             var barsDcPaEeEr = new List<double>();

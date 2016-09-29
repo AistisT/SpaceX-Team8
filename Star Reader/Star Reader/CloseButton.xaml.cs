@@ -17,6 +17,7 @@ namespace Star_Reader
 
         public event EventHandler Click;
 
+        // Tab close button
         private void OnClick(object sender, RoutedEventArgs e)
         {
             if (Click != null)
