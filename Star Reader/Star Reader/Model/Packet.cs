@@ -65,7 +65,7 @@ namespace Star_Reader.Model
             {
                 var payloadcrc = ComputeChecksum(CreateByteArray(Payload.Substring(headerstart)));
                 if (payloadcrc != 0)
-                    ErrorType = "Header Only CRC Error";
+                    ErrorType = "Header Only CRC Error. ";
             }
             else
                 //if (dataLength>0)
@@ -76,9 +76,9 @@ namespace Star_Reader.Model
                         CreateByteArray(Payload.Substring(headerstart, Payload.Length - datapart - headerstart)));
                 var datacrc = ComputeChecksum(CreateByteArray(Payload.Substring(Payload.Length - datapart)));
                 if (headercrc != 0)
-                    ErrorType = "Header CRC Error";
+                    ErrorType = "Header CRC Error. ";
                 if (datacrc != 0)
-                    ErrorType += "Data CRC Error";
+                    ErrorType += "Data CRC Error. ";
             }
         }
 
@@ -130,7 +130,7 @@ namespace Star_Reader.Model
             var x = int.Parse(a.ToString(), NumberStyles.HexNumber);
             var y = int.Parse(b.ToString(), NumberStyles.HexNumber);
             var z = int.Parse(c.ToString(), NumberStyles.HexNumber);
-            return c + b*256 + a*65536;
+            return z + y*256 + x*65536;
         }
 
         private int FindStartOfRmap()
