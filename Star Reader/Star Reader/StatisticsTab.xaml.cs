@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Navigation;
 using Dragablz;
 using LiveCharts;
 using LiveCharts.Wpf;
@@ -15,7 +13,7 @@ namespace Star_Reader
 {
     public partial class StatisticsTab : TabItem, INotifyPropertyChanged
     {
-        private Recording chartRecording;
+        private Recording _chartRecording;
 
         public StatisticsTab()
         {
@@ -65,18 +63,17 @@ namespace Star_Reader
             NotifyPropertyChanged("NrOfCharacters");
             NotifyPropertyChanged("NrOfPacketsTo");
             NotifyPropertyChanged("NrOfCharactersTo");
-
         }
 
         public void CalculateDataForCharts()
         {
             DataContext = this;
-            chartRecording = null;
-            chartRecording = new Recording();
+            _chartRecording = null;
+            _chartRecording = new Recording();
             ClearSeriesCollection();
             foreach (var recording in App.RecordingData.Values)
-                chartRecording.ListOfPackets.AddRange(recording.ListOfPackets);
-            if ((bool)!DataRate.IsChecked)
+                _chartRecording.ListOfPackets.AddRange(recording.ListOfPackets);
+            if ((bool) !DataRate.IsChecked)
                 DataRate.IsChecked = true;
             else
                 GenerateDataRate();
@@ -100,23 +97,20 @@ namespace Star_Reader
 
         protected void btn_click(object sender, EventArgs e)
         {
-            var b = (Button)sender;
+            var b = (Button) sender;
             var x = b.Content.ToString();
 
             var controlsList = TabablzControl.GetLoadedInstances();
 
             foreach (var control in controlsList)
-            {
                 for (var i = control.Items.Count; i > 0; i--)
                 {
-                    TabItem item = (TabItem)control.Items[i - 1];
+                    var item = (TabItem) control.Items[i - 1];
                     if (!item.Name.Equals("PortTab" + x)) continue;
                     control.SelectedItem = item;
                     control.Focus();
                     item.Focus();
                 }
-            }
-
         }
 
         //InitialiseGraphs on right of screen
@@ -127,7 +121,7 @@ namespace Star_Reader
                 new LineSeries
                 {
                     Title = "Data rate B/m",
-                    Values = new ChartValues<double>(),
+                    Values = new ChartValues<double>()
                 },
                 new RowSeries
                 {
@@ -172,10 +166,8 @@ namespace Star_Reader
             var plots = new List<double>();
             foreach (var recording in App.RecordingData.Values)
                 plots.AddRange(getPlots.GetPlots(recording));
-            foreach (double plot in plots)
-            {
+            foreach (var plot in plots)
                 SeriesCollection[0].Values.Add(plot);
-            }
         }
 
         private void DataRate_Unchecked(object sender, RoutedEventArgs e)
@@ -186,8 +178,8 @@ namespace Star_Reader
         private void Errors_Checked(object sender, RoutedEventArgs e)
         {
             var getBars = new Graphing();
-            if (chartRecording == null) return;
-            var bars = getBars.GetBars(chartRecording);
+            if (_chartRecording == null) return;
+            var bars = getBars.GetBars(_chartRecording);
             SeriesCollection[1].Values.Add(bars[0]);
             SeriesCollection[2].Values.Add(bars[1]);
             SeriesCollection[3].Values.Add(bars[2]);
@@ -204,9 +196,7 @@ namespace Star_Reader
         private void ClearSeriesCollection()
         {
             foreach (var collection in SeriesCollection)
-            {
                 collection.Values.Clear();
-            }
         }
     }
 }

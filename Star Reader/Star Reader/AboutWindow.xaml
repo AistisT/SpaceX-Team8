@@ -1,17 +1,17 @@
-﻿<Window x:Class="Star_Reader.Model.AboutWindow"
+﻿<Window x:Class="Star_Reader.AboutWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Star_Reader.Model"
+        xmlns:local="clr-namespace:Star_Reader"
         mc:Ignorable="d"
-        
-        Title="About Page" 
-        
+
+        Title="About Page"
+
         MinHeight="500"
         MinWidth="500"
-        
-        Height="650" 
+
+        Height="650"
         Width="800">
 
     <Grid>
@@ -20,12 +20,12 @@
                 <!--Margin = Left, Top, Right, Bottom-->
                 <!--Title for whole page-->
                 <TextBlock HorizontalAlignment="Center"
-                           Margin="0,10,0,5" 
-		                   TextWrapping="Wrap"
+                           Margin="0,10,0,5"
+                           TextWrapping="Wrap"
                            FontWeight="Bold"
                            TextDecorations="underline"
                            Text="About The Star Reader"
-		                   Padding="10" 
+                           Padding="10"
                            FontSize="24" />
 
                 <!--Heading for Introduction-->
@@ -35,7 +35,7 @@
                            Margin="20,10,20,0">
                     Introduction
                 </TextBlock>
-            
+
                 <!--Text for Introduction-->
                 <TextBlock HorizontalAlignment="Left"
                            TextWrapping="Wrap"
@@ -73,15 +73,16 @@
                            TextWrapping="Wrap"
                            FontSize="12"
                            Margin="20,10,20,10">
-                    The Overview is the top leftmost window. It contains on overview of all the packets that were read in. Packets can be clicked and the packet will be highlighted in the data chart to the right. The colour of the squares each have a different meaning. <LineBreak/><LineBreak/>
-                    Blue: A packet. <LineBreak/>
-                    Pink: The packet containing an error. <LineBreak/>
-                    Yellow: Parsing error. <LineBreak/>
-                    Red: Disconect. <LineBreak/>
-                    Orange: EEP error. <LineBreak/>
-                    White: Empty space. <LineBreak/>
-                    Beige: Empty space of over 1 second. <LineBreak/>
-                    Brown: Empty space of over 5 seconds. <LineBreak/><LineBreak/>
+                    The Overview is the top leftmost window. It contains on overview of all the packets that were read in. Packets can be clicked and the packet will be highlighted in the data chart to the right. The colour of the squares each have a different meaning.
+                    <LineBreak /><LineBreak />
+                    Blue: A packet. <LineBreak />
+                    Pink: The packet containing an error. <LineBreak />
+                    Yellow: Parsing error. <LineBreak />
+                    Red: Disconect. <LineBreak />
+                    Orange: EEP error. <LineBreak />
+                    White: Empty space. <LineBreak />
+                    Beige: Empty space of over 1 second. <LineBreak />
+                    Brown: Empty space of over 5 seconds. <LineBreak /><LineBreak />
                     Underneath the overview there is a reminder of what each coloured square means.
                 </TextBlock>
 
@@ -114,7 +115,7 @@
                            TextWrapping="Wrap"
                            FontSize="12"
                            Margin="20,10,20,10">
-                    The search bar, top right corner, can be used to search through the data (shown in the data chart). You can search by Data Content, Error or Time. 
+                    The search bar, top right corner, can be used to search through the data (shown in the data chart). You can search by Data Content, Error or Time.
                 </TextBlock>
 
                 <!--Heading for Data Chart-->

@@ -347,9 +347,9 @@ namespace Star_Reader
                     tabControl?.Items.Remove(this);
                     App.RecordingData.Remove(_gData.Port);
                     var mainWindow = (MainWindow) Application.Current.MainWindow;
-                    mainWindow.updateStatistics();
+                    mainWindow.UpdateStatistics();
                 };
-            closeButton.tabHeaderGrid.Children.Add(header);
+            closeButton.TabHeaderGrid.Children.Add(header);
             Header = closeButton;
         }
 

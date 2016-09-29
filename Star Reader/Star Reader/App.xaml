@@ -5,7 +5,7 @@
              StartupUri="MainWindow.xaml"
              xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz"
              xmlns:dockablz="clr-namespace:Dragablz.Dockablz;assembly=Dragablz"
-             xmlns:system="clr-namespace:System;assembly=mscorlib" >
+             xmlns:system="clr-namespace:System;assembly=mscorlib">
     <Application.Resources>
         <system:String x:Key="Partition">QuickStart</system:String>
     </Application.Resources>
