@@ -1,12 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Globalization;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Threading;
 using LiveCharts;
 using LiveCharts.Wpf;
 using Star_Reader.Model;
@@ -18,9 +20,15 @@ namespace Star_Reader
     /// </summary>
     public partial class DetailsTab : TabItem, INotifyPropertyChanged
     {
-        private ICollectionView dataGridCollection;
-        private string filterString;
-        private Recording gData;
+        private readonly DispatcherTimer _resizeTimer = new DispatcherTimer
+        {
+            Interval = new TimeSpan(0, 0, 0, 0, 200),
+            IsEnabled = false
+        };
+
+        private ICollectionView _dataGridCollection;
+        private string _filterString;
+        private Recording _gData;
 
         //Constructor
         public DetailsTab(int portNr)
@@ -31,33 +39,33 @@ namespace Star_Reader
             DataGridCollection = CollectionViewSource.GetDefaultView(App.RecordingData[portNr].ListOfPackets);
             DataGridCollection.Filter = Filter;
             DataContext = this;
+            _resizeTimer.Tick += ResizeStopped;
         }
 
         public string[] Labels { get; set; }
 
         public ICollectionView DataGridCollection
         {
-            get { return dataGridCollection; }
+            get { return _dataGridCollection; }
             set
             {
-                dataGridCollection = value;
+                _dataGridCollection = value;
                 NotifyPropertyChanged("DataGridCollection");
             }
         }
 
         public string FilterString
         {
-            get { return filterString; }
+            get { return _filterString; }
             set
             {
-                filterString = value;
+                _filterString = value;
                 NotifyPropertyChanged("FilterString");
                 FilterCollection();
             }
         }
 
         public SeriesCollection SeriesCollection { get; set; }
-
         public int NrOfErrors { get; set; }
         public int NrOfPackets { get; set; }
         public int NrOfCharacters { get; set; }
@@ -67,39 +75,41 @@ namespace Star_Reader
 
         private void NotifyPropertyChanged(string property)
         {
-            // PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(property));
         }
 
         private void FilterCollection()
         {
-            if (dataGridCollection != null)
-                dataGridCollection.Refresh();
+            if (_dataGridCollection != null)
+                _dataGridCollection.Refresh();
         }
 
         public bool Filter(object obj)
         {
             var packet = obj as Packet;
             if (packet == null) return false;
-            if (string.IsNullOrEmpty(filterString)) return true;
-            return ((packet.ErrorType != null) &&
-                    (CultureInfo.CurrentCulture.CompareInfo.IndexOf(packet.ErrorType, filterString,
+            if (string.IsNullOrEmpty(_filterString)) return true;
+            return ((packet.ErrorType != null)
+                    &&
+                    (CultureInfo.CurrentCulture.CompareInfo.IndexOf(packet.ErrorType, _filterString,
                          CompareOptions.IgnoreCase) >= 0))
                    ||
-                   ((packet.Payload != null) &&
-                    (CultureInfo.CurrentCulture.CompareInfo.IndexOf(packet.Payload, filterString,
+                   ((packet.Payload != null)
+                    &&
+                    (CultureInfo.CurrentCulture.CompareInfo.IndexOf(packet.Payload, _filterString,
                          CompareOptions.IgnoreCase) >= 0))
                    ||
-                   (CultureInfo.CurrentCulture.CompareInfo.IndexOf(packet.PacketType.ToString(), filterString,
+                   (CultureInfo.CurrentCulture.CompareInfo.IndexOf(packet.PacketType.ToString(), _filterString,
                         CompareOptions.IgnoreCase) >= 0)
                    ||
-                   ((packet.PacketEnd != null) &&
-                    (CultureInfo.CurrentCulture.CompareInfo.IndexOf(packet.PacketEnd, filterString,
+                   ((packet.PacketEnd != null)
+                    &&
+                    (CultureInfo.CurrentCulture.CompareInfo.IndexOf(packet.PacketEnd, _filterString,
                          CompareOptions.IgnoreCase) >= 0))
                    ||
                    (CultureInfo.CurrentCulture.CompareInfo.IndexOf(packet.Time.ToString("MM/dd/yyyy HH:mm:ss.fff"),
-                        filterString, CompareOptions.IgnoreCase) >= 0);
+                        _filterString, CompareOptions.IgnoreCase) >= 0);
         }
 
         private void Row_DoubleClick(object sender, MouseButtonEventArgs e)
@@ -129,8 +139,8 @@ namespace Star_Reader
                 var p = r.ListOfPackets[i];
                 if (i > 0)
                 {
-                    var NextP = r.ListOfPackets[i - 1];
-                    var td = p.Time.Subtract(NextP.Time);
+                    var nextP = r.ListOfPackets[i - 1];
+                    var td = p.Time.Subtract(nextP.Time);
                     if (td.TotalMilliseconds > 100)
                     {
                         var btn1s = new Button
@@ -212,7 +222,7 @@ namespace Star_Reader
                 btn1.Tag = portNr + "" + i;
                 PacketViewerA.Children.Add(btn1);
             }
-            gData = r;
+            _gData = r;
             InitialiseGraphs();
         } //End of PopulateOverview
 
@@ -279,7 +289,7 @@ namespace Star_Reader
         {
             var getPlots = new Graphing();
 
-            var plots = getPlots.GetPlots(gData);
+            var plots = getPlots.GetPlots(_gData);
             foreach (var plot in plots)
                 SeriesCollection[0].Values.Add(plot);
         }
@@ -292,7 +302,7 @@ namespace Star_Reader
         private void Errors_Checked(object sender, RoutedEventArgs e)
         {
             var getBars = new Graphing();
-            var bars = getBars.GetBars(gData);
+            var bars = getBars.GetBars(_gData);
             SeriesCollection[1].Values.Add(bars[0]);
             SeriesCollection[2].Values.Add(bars[1]);
             SeriesCollection[3].Values.Add(bars[2]);
@@ -309,9 +319,9 @@ namespace Star_Reader
 
         private void InitialiseGauge()
         {
-            NrOfErrors = gData.ErrorsPresent;
-            NrOfPackets = gData.ListOfPackets.Count;
-            NrOfCharacters = gData.GetNumberOfCharacters();
+            NrOfErrors = _gData.ErrorsPresent;
+            NrOfPackets = _gData.ListOfPackets.Count;
+            NrOfCharacters = _gData.GetNumberOfCharacters();
 
             NrOfCharactersTo = NrOfCharacters;
             NrOfPacketsTo = NrOfPackets;
@@ -335,7 +345,7 @@ namespace Star_Reader
                 {
                     var tabControl = Parent as ItemsControl;
                     tabControl?.Items.Remove(this);
-                    App.RecordingData.Remove(gData.Port);
+                    App.RecordingData.Remove(_gData.Port);
                     var mainWindow = (MainWindow) Application.Current.MainWindow;
                     mainWindow.updateStatistics();
                 };
@@ -343,121 +353,68 @@ namespace Star_Reader
             Header = closeButton;
         }
 
-
-        /*
-         * Initialise the time stamps for the left side of the overview.
-         * Coordinates for the buttons are all 0.
-         * Width of the parent is also 0.
-         * So couldn't impliment it as we need to know what packet is the left most packet.
-         * Cannot do this without width or coordinates.
-         * Still researching is there is another way.
-         * For the moment it just displays the time stamp of the first packet.
-         */
-
-        public void InitialiseTimeStamps()
+        public void GenerateTimeStamps()
         {
             var panelWidth = PacketViewerA.ActualWidth;
             var button = VisualTreeHelper.GetChild(PacketViewerA, 0) as Button;
+            if (button == null) return;
             var buttonWidth = button.ActualWidth;
             var numberOfButtonsPerRow = (int) panelWidth/(int) buttonWidth;
-            //InitialLabel.Margin = new Thickness(0, 0, 0, 0); //Left, top, right, bottom
 
-            //int childrenCount = VisualTreeHelper.GetChildrenCount(TimeStamps);
-            //UIElement contain = VisualTreeHelper.GetChild(TimeStamps, childrenCount - 1) as UIElement;
-            //UIElement container = VisualTreeHelper.GetParent(contain) as UIElement;
-            //Point relativeLocation = contain.TranslatePoint(new Point(0, yPlus), container);
-
-            //int childrenCount2 = VisualTreeHelper.GetChildrenCount(TimeStamps);
-
-
-            var contain3 = VisualTreeHelper.GetChild(PacketViewerA, numberOfButtonsPerRow + 1) as Button;
-            var currentPoint = contain3.TransformToAncestor(PacketViewerA).Transform(new Point(0, 0));
-            //Button contain3 = VisualTreeHelper.GetChild(PacketViewerA, 1) as Button;
-            //UIElement container2 = VisualTreeHelper.GetParent(contain2) as UIElement;
-            //Point relativeLocation = contain2.TranslatePoint(new Point(0, yPlus), container2);
-            //var relativeLocation2 = contain2.TransformToAncestor(this);
-
-            //string str = null;
-            //str = contain2.ToolTip as string;
-            //if (str.Contains("P") == true) //ignore the button if it is an error or an "empty space" button
-            //{
-            // Return the offset vector for the TextBlock object.
-            //Vector vector = VisualTreeHelper.GetOffset(contain2);
-            // Convert the vector to a point value.
-            //Point currentPoint = new Point(vector.X, vector.Y);
-
-            /*UIElement firstItem = ((PacketViewerA.Children)[0] as UIElement);
-            double y = firstItem.TranslatePoint(new Point(0, 0), PacketViewerA).Y;
-
-            int counter = 0;
-            foreach (UIElement item in PacketViewerA.Children)
+            for (var i = 0; i < VisualTreeHelper.GetChildrenCount(PacketViewerA); i += numberOfButtonsPerRow)
             {
-                if ((item.TranslatePoint(new Point(0, 0), PacketViewerA).Y != y))
+                var child = VisualTreeHelper.GetChild(PacketViewerA, i) as Button;
+
+                if (child == null) continue;
+                var timestamp = child.ToolTip as string;
+
+                if (timestamp == null) continue;
+                var counter = 1;
+                while ((timestamp != null) && timestamp.Contains("Empty Space of "))
                 {
-                    break;
+                    child = VisualTreeHelper.GetChild(PacketViewerA, i + counter) as Button;
+                    counter++;
+                    if (child != null) timestamp = child.ToolTip as string;
                 }
-                counter++;
-            }*/
-
-            //double width = PacketViewerA.ActualWidth;
-            //double width = blah.ActualWidth;
-
-            //Point relativePoint = contain3.TransformToVisual(contain2).Transform(new Point(0, 0));
-
-            //Point position = contain2.PointToScreen(new Point(0d, 0d));
-
-            string str2 = null;
-            str2 = button.ToolTip as string;
-            var str3 = contain3.ToolTip as string;
-
-            var Lbl1 = new Label
-            {
-                Height = 20,
-                FontSize = 9,
-                //Content = contain2.ToolTip
-                Content = str2.Substring(11, 12)
-                //Content = position
-            };
-            var Lbl2 = new Label
-            {
-                Height = 20,
-                FontSize = 9,
-                //Content = contain2.ToolTip
-                Content = str3.Substring(11, 12)
-                //Content = position
-            };
-
-            TimeStamps.Children.Add(Lbl1);
-            TimeStamps.Children.Add(Lbl2);
-
-            //}
-            //else
-            //{
-            //do nothing
-            //}
+                if (timestamp == null) continue;
+                var label = new Label
+                {
+                    Height = 20,
+                    FontSize = 9,
+                    Content = timestamp.Substring(11, 12)
+                };
+                TimeStamps.Children.Add(label);
+            }
         } //End of InitialiseTimeStamps
 
-        private static int GetNumberOfItemsInFirstRow(ItemsControl itemsControl)
+        private void ClearTimeStamps()
         {
-            double previousX = -1;
-            int itemIndex;
-
-            for (itemIndex = 0; itemIndex < itemsControl.Items.Count; itemIndex++)
+            var timestamps = from UIElement timestamp in TimeStamps.Children where timestamp is Label select timestamp;
+            var uiElements = timestamps as IList<UIElement> ?? timestamps.ToList();
+            for (var i = uiElements.Count; i > 0; i--)
             {
-                var container = (UIElement) itemsControl.ItemContainerGenerator.ContainerFromIndex(itemIndex);
-                var x = container.TranslatePoint(new Point(), itemsControl).X;
-                if (x <= previousX)
-                    break;
-                previousX = x;
+                var element = (Label) uiElements[i - 1];
+                TimeStamps.Children.Remove(element);
             }
-            return itemIndex;
         }
-
 
         private void PacketViewerA_OnLoaded(object sender, RoutedEventArgs e)
         {
-            Debug.WriteLine("packet viewer loaded");
-            InitialiseTimeStamps();
+            GenerateTimeStamps();
+        }
+
+        private void ResizeStopped(object sender, EventArgs e)
+        {
+            _resizeTimer.IsEnabled = false;
+            ClearTimeStamps();
+            GenerateTimeStamps();
+        }
+
+        private void PacketViewerA_OnSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            _resizeTimer.IsEnabled = true;
+            _resizeTimer.Stop();
+            _resizeTimer.Start();
         }
     }
 }

@@ -110,12 +110,10 @@ namespace Star_Reader
                 for (var i = control.Items.Count; i > 0; i--)
                 {
                     TabItem item = (TabItem)control.Items[i - 1];
-                    if (item.Name.Equals("PortTab"+x))
-                    {
-                        control.SelectedItem = item;
-                        control.Focus();
-                        item.Focus();
-                    }
+                    if (!item.Name.Equals("PortTab" + x)) continue;
+                    control.SelectedItem = item;
+                    control.Focus();
+                    item.Focus();
                 }
             }
 
