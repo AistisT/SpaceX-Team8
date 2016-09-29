@@ -85,9 +85,9 @@ namespace Star_Reader.Model
         public static byte ComputeChecksum(params byte[] bytes)
         {
             byte crc = 0;
-            if ((bytes != null) && (bytes.Length > 0))
-                foreach (var b in bytes)
-                    crc = Table[crc ^ b];
+            if ((bytes == null) || (bytes.Length <= 0)) return crc;
+            foreach (var b in bytes)
+                crc = Table[crc ^ b];
             return crc;
         }
 
@@ -105,10 +105,7 @@ namespace Star_Reader.Model
             var bytes = CreateByteArray(Payload);
             for (var i = 0; i < bytes.Length; i++)
                 if (int.Parse(bytes[i].ToString(), NumberStyles.HexNumber) > 31)
-                    if (bytes[i + 1].ToString().Equals("1"))
-                        return true;
-                    else
-                        return false;
+                    return bytes[i + 1].ToString().Equals("1");
             return false;
         }
 

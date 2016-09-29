@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Star_Reader.Model
 {
@@ -29,7 +28,7 @@ namespace Star_Reader.Model
 
         public List<double> GetDataRates()
         {
-            var timeInterval = 60;
+            const int timeInterval = 60;
             var recordingLength = GetDurationOfRecording();
             var dataStartPoint = PacketStartTime;
             var dataEndPoint = PacketStartTime.AddSeconds(timeInterval);
@@ -42,8 +41,6 @@ namespace Star_Reader.Model
                 var packets = 0;
                 foreach (Packet packet in ListOfPackets)
                 {
-                    var a = packet.Time.Subtract(dataStartPoint);
-                    var b = dataEndPoint.Subtract(packet.Time);
                     if ((packet.Time.Subtract(dataStartPoint).TotalSeconds <= timeInterval) &&
                         (dataEndPoint.Subtract(packet.Time).TotalSeconds <= timeInterval))
                         packets += packet.GetNumberOfBytes();
@@ -90,9 +87,9 @@ namespace Star_Reader.Model
                         idiots.Add(j);
             }
             if (idiots.Count == 0) return;
-            for (var k = 0; k < idiots.Count(); k++)
+            foreach (int idiot in idiots)
             {
-                ListOfPackets[idiots[k]].ErrorType += "Babbling Idiot Detected. ";
+                ListOfPackets[idiot].ErrorType += "Babbling Idiot Detected. ";
                 ErrorsPresent++;
             }
         }
@@ -103,7 +100,7 @@ namespace Star_Reader.Model
             var possiblepossibles = new List<int>();
             var templist = new List<int>();
             //if(possiblecounters.Count!=1)
-            for (var i = 0; i < ListOfPackets.Count() - 1; i++)
+            for (var i = 0; i < ListOfPackets.Count - 1; i++)
             {
                 var a = ListOfPackets[i];
                 var b = ListOfPackets[i + 1];
@@ -151,20 +148,16 @@ namespace Star_Reader.Model
                 var a = ListOfPackets[i];
                 var b = ListOfPackets[i + 1];
 
-                if ((a.Payload != null) && (b.Payload != null))
-                {
-                    var aStart = a.FindStartOfPacket();
-                    var bStart = b.FindStartOfPacket();
-                    var byteArrayA = a.CreateByteArray(a.Payload.Substring(aStart));
-                    var byteArrayB = b.CreateByteArray(b.Payload.Substring(bStart));
-                    if (byteArrayA.Length == byteArrayB.Length)
-                        if (a.Convert24BitToint(00, byteArrayA[counterloc], byteArrayA[counterloc + 1]) -
-                            a.Convert24BitToint(00, byteArrayB[counterloc], byteArrayB[counterloc + 1]) == 1)
-                        {
-                            b.ErrorType += "Out of Sequence. ";
-                            ErrorsPresent++;
-                        }
-                }
+                if ((a.Payload == null) || (b.Payload == null)) continue;
+                var aStart = a.FindStartOfPacket();
+                var bStart = b.FindStartOfPacket();
+                var byteArrayA = a.CreateByteArray(a.Payload.Substring(aStart));
+                var byteArrayB = b.CreateByteArray(b.Payload.Substring(bStart));
+                if (byteArrayA.Length != byteArrayB.Length) continue;
+                if (a.Convert24BitToint(00, byteArrayA[counterloc], byteArrayA[counterloc + 1]) -
+                    a.Convert24BitToint(00, byteArrayB[counterloc], byteArrayB[counterloc + 1]) != 1) continue;
+                b.ErrorType += "Out of Sequence. ";
+                ErrorsPresent++;
             }
         }
 
@@ -173,7 +166,7 @@ namespace Star_Reader.Model
             foreach (var p in ListOfPackets)
             {
                 if ((HeaderLength != 0) || (p.Payload == null)) continue;
-                var startofpacket = p.FindStartOfPacket();
+                p.FindStartOfPacket();
                 HeaderLength = p.FindHeaderEnd();
                 //Console.WriteLine(p.Payload.Substring(p.findStartOfPacket(); + HeaderLength + 1));
             }
@@ -184,7 +177,7 @@ namespace Star_Reader.Model
             foreach (var p in ListOfPackets)
             {
                 if ((DataLength != 0) || (p.Payload == null) || (HeaderLength == 0)) continue;
-                var startofpacket = p.FindStartOfPacket();
+                p.FindStartOfPacket();
                 DataLength = p.Payload.Substring(p.FindStartOfPacket() + HeaderLength + 1).Length;
                 //Console.WriteLine(p.Payload.Substring(p.findStartOfPacket() + HeaderLength + 1));
                 // Console.WriteLine(p.Payload.Substring(p.Payload.Length - DataLength));

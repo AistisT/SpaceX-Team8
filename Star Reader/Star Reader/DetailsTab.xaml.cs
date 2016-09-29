@@ -116,7 +116,7 @@ namespace Star_Reader
         {
             var packet = DetailedViewerA.SelectedItem;
             var selectedRow =
-                (DataGridRow) DetailedViewerA.ItemContainerGenerator.ContainerFromIndex(DetailedViewerA.SelectedIndex);
+                (DataGridRow)DetailedViewerA.ItemContainerGenerator.ContainerFromIndex(DetailedViewerA.SelectedIndex);
             FilterString = "";
             FilterCollection();
             if (selectedRow == null) return;
@@ -159,15 +159,13 @@ namespace Star_Reader
                             case 2:
                             case 3:
                             case 4:
-                                btn1s.ToolTip = "Empty Space of " + td.Seconds + "." +
-                                                td.TotalMilliseconds.ToString().Substring(1) + " seconds.";
-                                btn1s.Background = (SolidColorBrush) new BrushConverter().ConvertFrom("#ffe699");
+                                btn1s.ToolTip = "Empty Space of " + td.Seconds + "." + td.TotalMilliseconds.ToString().Substring(1) + " seconds.";
+                                btn1s.Background = (SolidColorBrush)new BrushConverter().ConvertFrom("#ffe699");
                                 // Beige
                                 break;
                             default:
-                                btn1s.ToolTip = "Empty Space of " + td.Seconds + "." +
-                                                td.TotalMilliseconds.ToString().Substring(1) + " seconds.";
-                                btn1s.Background = (SolidColorBrush) new BrushConverter().ConvertFrom("#994d00");
+                                btn1s.ToolTip = "Empty Space of " + td.Seconds + "." + td.TotalMilliseconds.ToString().Substring(1) + " seconds.";
+                                btn1s.Background = (SolidColorBrush)new BrushConverter().ConvertFrom("#994d00");
                                 break;
                         }
                         PacketViewerA.Children.Add(btn1s);
@@ -183,15 +181,13 @@ namespace Star_Reader
                     switch (p.ErrorType)
                     {
                         case "Disconnect":
-                            btn1.Background = (SolidColorBrush) new BrushConverter().ConvertFrom("#ff3333");
-                            btn1.ToolTip = p.Time + "." + p.Time.ToString("fff") + "\n" + p.PacketType + "\n" +
-                                           p.ErrorType;
+                            btn1.Background = (SolidColorBrush)new BrushConverter().ConvertFrom("#ff3333");
+                            btn1.ToolTip = p.Time + "." + p.Time.ToString("fff") + "\n" + p.PacketType + "\n" + p.ErrorType;
                             btn1.Content = p.ErrorType[0];
                             break;
                         case "Parity":
                             btn1.Background = Brushes.Yellow;
-                            btn1.ToolTip = p.Time + "." + p.Time.ToString("fff") + "\n" + p.PacketType + "\n" +
-                                           p.ErrorType;
+                            btn1.ToolTip = p.Time + "." + p.Time.ToString("fff") + "\n" + p.PacketType + "\n" + p.ErrorType;
                             btn1.Content = p.ErrorType[0];
                             break;
                     }
@@ -200,22 +196,40 @@ namespace Star_Reader
                 {
                     if (p.PacketEnd.Equals("EOP"))
                     {
-                        btn1.Background = (SolidColorBrush) new BrushConverter().ConvertFrom("#00dddd"); // Blue
-                        btn1.ToolTip = p.Time + "." + p.Time.ToString("fff") + "\n" + p.PacketType + "\n" + p.Payload +
-                                       "\n" + p.PacketEnd;
+                        if (p.ErrorType != null && p.ErrorType.Contains("Out of Sequence"))
+                        {
+                            btn1.Background = Brushes.Goldenrod;
+                            btn1.ToolTip = p.Time + "." + p.Time.ToString("fff") + "\n" + p.PacketType + "\n" + p.ErrorType;
+                            btn1.Content = p.ErrorType[0];
+                        }
+                        else if (p.ErrorType != null && p.ErrorType.Contains("Babbling Idiot"))
+                        {
+                            btn1.Background = Brushes.AntiqueWhite;
+                            btn1.ToolTip = p.Time + "." + p.Time.ToString("fff") + "\n" + p.PacketType + "\n" + p.ErrorType;
+                            btn1.Content = p.ErrorType[0];
+                        }
+                        else if(p.ErrorType != null && p.ErrorType.Contains("CRC"))
+                        {
+                            btn1.Background = Brushes.Fuchsia;
+                            btn1.ToolTip = p.Time + "." + p.Time.ToString("fff") + "\n" + p.PacketType + "\n" + p.ErrorType;
+                            btn1.Content = p.ErrorType[0];
+                        }
+                        else
+                        {
+                            btn1.Background = (SolidColorBrush)new BrushConverter().ConvertFrom("#00dddd"); // Blue
+                            btn1.ToolTip = p.Time + "." + p.Time.ToString("fff") + "\n" + p.PacketType + "\n" + p.Payload + "\n" + p.PacketEnd;
+                        }
                     }
                     else if (p.PacketEnd.Equals("EEP"))
                     {
                         btn1.Background = Brushes.Orange;
-                        btn1.ToolTip = p.Time + "." + p.Time.ToString("fff") + "\n" + p.PacketType + "\n" + p.Payload +
-                                       "\n" + p.PacketEnd;
+                        btn1.ToolTip = p.Time + "." + p.Time.ToString("fff") + "\n" + p.PacketType + "\n" + p.Payload + "\n" + p.PacketEnd;
                         btn1.Content = p.PacketEnd[0];
                     }
                     else
                     {
-                        btn1.Background = (SolidColorBrush) new BrushConverter().ConvertFrom("#ffaacc"); // Pink
-                        btn1.ToolTip = p.Time + "." + p.Time.ToString("fff") + "\n" + p.PacketType + "\n" + p.Payload +
-                                       "\n" + p.PacketEnd;
+                        btn1.Background = (SolidColorBrush)new BrushConverter().ConvertFrom("#ffaacc"); // Pink
+                        btn1.ToolTip = p.Time + "." + p.Time.ToString("fff") + "\n" + p.PacketType + "\n" + p.Payload + "\n" + p.PacketEnd;
                     }
                 }
                 btn1.Click += btn_click;
@@ -229,7 +243,7 @@ namespace Star_Reader
         //on click for buttons in overview
         protected void btn_click(object sender, EventArgs e)
         {
-            var b = (Button) sender;
+            var b = (Button)sender;
             var x = b.Tag.ToString();
             var portc = x[0];
             var port = int.Parse(portc + "");
@@ -237,7 +251,7 @@ namespace Star_Reader
             DetailedViewerA.ScrollIntoView(App.RecordingData[port].ListOfPackets[item]);
             DetailedViewerA.SelectedItem = App.RecordingData[port].ListOfPackets[item];
             var selectedRow =
-                (DataGridRow) DetailedViewerA.ItemContainerGenerator.ContainerFromIndex(DetailedViewerA.SelectedIndex);
+                (DataGridRow)DetailedViewerA.ItemContainerGenerator.ContainerFromIndex(DetailedViewerA.SelectedIndex);
             FocusManager.SetIsFocusScope(selectedRow, true);
             FocusManager.SetFocusedElement(selectedRow, selectedRow);
         }
@@ -254,31 +268,51 @@ namespace Star_Reader
                 },
                 new RowSeries
                 {
-                    Title = "Errors",
+                    Title = "Disconnect",
                     Values = new ChartValues<double>(),
-                    DataLabels = true,
-                    LabelPoint = point => point.X + ""
+
                 },
                 new RowSeries
                 {
                     Title = "Parity",
                     Values = new ChartValues<double>(),
-                    DataLabels = true,
-                    LabelPoint = point => point.X + ""
+
                 },
                 new RowSeries
                 {
-                    Title = "EEP",
+                    Title = "Out of Sequence",
                     Values = new ChartValues<double>(),
-                    DataLabels = true,
-                    LabelPoint = point => point.X + ""
+
+                },
+                new RowSeries
+                {
+                    Title = "Repeated Packets",
+                    Values = new ChartValues<double>(),
+
+                },
+                 new RowSeries
+                {
+                    Title = "Data CRC Error",
+                    Values = new ChartValues<double>(),
+
+                },
+                new RowSeries
+                {
+                    Title = "Header CRC Error",
+                    Values = new ChartValues<double>(),
+
+                },
+                new RowSeries
+                {
+                    Title = "Incorrect Data Length",
+                    Values = new ChartValues<double>(),
+
                 },
                 new RowSeries
                 {
                     Title = "Total Errors",
                     Values = new ChartValues<double>(),
-                    DataLabels = true,
-                    LabelPoint = point => point.X + ""
+
                 }
             };
 
@@ -307,6 +341,10 @@ namespace Star_Reader
             SeriesCollection[2].Values.Add(bars[1]);
             SeriesCollection[3].Values.Add(bars[2]);
             SeriesCollection[4].Values.Add(bars[3]);
+            SeriesCollection[5].Values.Add(bars[4]);
+            SeriesCollection[6].Values.Add(bars[5]);
+            SeriesCollection[7].Values.Add(bars[6]);
+            SeriesCollection[8].Values.Add(bars[7]);
         }
 
         private void Errors_Unchecked(object sender, RoutedEventArgs e)
@@ -315,6 +353,10 @@ namespace Star_Reader
             SeriesCollection[2].Values.Clear();
             SeriesCollection[3].Values.Clear();
             SeriesCollection[4].Values.Clear();
+            SeriesCollection[5].Values.Clear();
+            SeriesCollection[6].Values.Clear();
+            SeriesCollection[7].Values.Clear();
+            SeriesCollection[8].Values.Clear();
         }
 
         private void InitialiseGauge()
@@ -346,7 +388,7 @@ namespace Star_Reader
                     var tabControl = Parent as ItemsControl;
                     tabControl?.Items.Remove(this);
                     App.RecordingData.Remove(_gData.Port);
-                    var mainWindow = (MainWindow) Application.Current.MainWindow;
+                    var mainWindow = (MainWindow)Application.Current.MainWindow;
                     mainWindow.UpdateStatistics();
                 };
             closeButton.TabHeaderGrid.Children.Add(header);
@@ -359,7 +401,7 @@ namespace Star_Reader
             var button = VisualTreeHelper.GetChild(PacketViewerA, 0) as Button;
             if (button == null) return;
             var buttonWidth = button.ActualWidth;
-            var numberOfButtonsPerRow = (int) panelWidth/(int) buttonWidth;
+            var numberOfButtonsPerRow = (int)panelWidth / (int)buttonWidth;
 
             for (var i = 0; i < VisualTreeHelper.GetChildrenCount(PacketViewerA); i += numberOfButtonsPerRow)
             {
@@ -393,7 +435,7 @@ namespace Star_Reader
             var uiElements = timestamps as IList<UIElement> ?? timestamps.ToList();
             for (var i = uiElements.Count; i > 0; i--)
             {
-                var element = (Label) uiElements[i - 1];
+                var element = (Label)uiElements[i - 1];
                 TimeStamps.Children.Remove(element);
             }
         }

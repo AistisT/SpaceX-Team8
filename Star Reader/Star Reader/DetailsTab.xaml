@@ -82,7 +82,14 @@
 
                 <DataGrid.CellStyle>
                     <Style TargetType="DataGridCell">
+                        <!--<Setter Property="Background" Value="{Binding ErrorType, Converter = {StaticResource NameToColorConvertor}}" />-->
+
                         <Style.Triggers>
+                            <DataTrigger Binding="{Binding PacketEnd}" Value="EOP">
+                                <Setter Property="Background" Value="#00dddd" />
+                                <!--Blue-->
+                            </DataTrigger>
+
                             <DataTrigger Binding="{Binding ErrorType}" Value="Disconnect">
                                 <Setter Property="Background" Value="#ff3333" /> <!--Red-->
                             </DataTrigger>
@@ -90,13 +97,29 @@
                             <DataTrigger Binding="{Binding ErrorType}" Value="Parity">
                                 <Setter Property="Background" Value="Yellow" />
                             </DataTrigger>
-                            
-                            <DataTrigger Binding="{Binding ErrorType}" Value="Out of Sequence">
-                                <Setter Property="Background" Value="Khaki" />
+
+                            <DataTrigger Binding="{Binding ErrorType}" Value="Out of Sequence. ">
+                                <Setter Property="Background" Value="Goldenrod" />
                             </DataTrigger>
 
-                            <DataTrigger Binding="{Binding PacketEnd}" Value="EOP">
-                                <Setter Property="Background" Value="#00dddd" /> <!--Blue-->
+                            <DataTrigger Binding="{Binding ErrorType}" Value="Babbling Idiot Detected. ">
+                                <Setter Property="Background" Value="AntiqueWhite" />
+                            </DataTrigger>
+
+                            <DataTrigger Binding="{Binding ErrorType}" Value="Data CRC Error. ">
+                                <Setter Property="Background" Value="Fuchsia" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ErrorType}" Value="Header CRC Error. ">
+                                <Setter Property="Background" Value="Fuchsia" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ErrorType}" Value="Header Only CRC Error. ">
+                                <Setter Property="Background" Value="Fuchsia" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ErrorType}" Value="Header CRC Error. Data CRC Error. ">
+                                <Setter Property="Background" Value="Fuchsia" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ErrorType}" Value="Header CRC Error. Incorrect Data Length. ">
+                                <Setter Property="Background" Value="Fuchsia" />
                             </DataTrigger>
 
                             <DataTrigger Binding="{Binding PacketEnd}" Value="EEP">
@@ -183,9 +206,27 @@
             </StackPanel>
 
             <StackPanel Orientation="Horizontal">
-                <Rectangle ToolTip="Out of sequence error" Width="15" Height="15" Fill="Khaki" Stroke="Black"
+                <Rectangle ToolTip="Disconnect" Width="15" Height="15" Fill="#ff3333" Stroke="Black"
+                           StrokeThickness="2" />
+                <TextBlock Padding="0,0,5,0" Text="-Disconnect" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal">
+                <Rectangle ToolTip="Out of sequence error" Width="15" Height="15" Fill="Goldenrod" Stroke="Black"
                            StrokeThickness="2" />
                 <TextBlock Padding="0,0,5,0" Text="-Out of sequence error" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal">
+                <Rectangle ToolTip="Repeated packets" Width="15" Height="15" Fill="AntiqueWhite" Stroke="Black"
+                           StrokeThickness="2" />
+                <TextBlock Padding="0,0,5,0" Text="-Repeated packets" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal">
+                <Rectangle ToolTip="CRC Error" Width="15" Height="15" Fill="Fuchsia" Stroke="Black"
+                           StrokeThickness="2" />
+                <TextBlock Padding="0,0,5,0" Text="-CRC Error" />
             </StackPanel>
 
             <StackPanel Orientation="Horizontal">
@@ -205,11 +246,7 @@
                 <TextBlock Padding="0,0,5,0" Text="-Packet not send" />
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal">
-                <Rectangle ToolTip="Disconnect" Width="15" Height="15" Fill="#ff3333" Stroke="Black"
-                           StrokeThickness="2" />
-                <TextBlock Padding="0,0,5,0" Text="-Disconnect" />
-            </StackPanel>
+
 
         </WrapPanel>
         <!--packet description boxes end-->

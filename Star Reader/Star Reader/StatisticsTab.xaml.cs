@@ -125,31 +125,51 @@ namespace Star_Reader
                 },
                 new RowSeries
                 {
-                    Title = "Errors",
+                    Title = "Disconnect",
                     Values = new ChartValues<double>(),
-                    DataLabels = true,
-                    LabelPoint = point => point.X + ""
+
                 },
                 new RowSeries
                 {
                     Title = "Parity",
                     Values = new ChartValues<double>(),
-                    DataLabels = true,
-                    LabelPoint = point => point.X + ""
+
                 },
                 new RowSeries
                 {
-                    Title = "EEP",
+                    Title = "Out of Sequence",
                     Values = new ChartValues<double>(),
-                    DataLabels = true,
-                    LabelPoint = point => point.X + ""
+
+                },
+                new RowSeries
+                {
+                    Title = "Repeated Packets",
+                    Values = new ChartValues<double>(),
+
+                },
+                 new RowSeries
+                {
+                    Title = "Data CRC Error",
+                    Values = new ChartValues<double>(),
+
+                },
+                new RowSeries
+                {
+                    Title = "Header CRC Error",
+                    Values = new ChartValues<double>(),
+
+                },
+                new RowSeries
+                {
+                    Title = "Incorrect Data Length",
+                    Values = new ChartValues<double>(),
+
                 },
                 new RowSeries
                 {
                     Title = "Total Errors",
                     Values = new ChartValues<double>(),
-                    DataLabels = true,
-                    LabelPoint = point => point.X + ""
+
                 }
             };
         } //End of InitializeGraphs
@@ -183,6 +203,11 @@ namespace Star_Reader
             SeriesCollection[1].Values.Add(bars[0]);
             SeriesCollection[2].Values.Add(bars[1]);
             SeriesCollection[3].Values.Add(bars[2]);
+            SeriesCollection[4].Values.Add(bars[3]);
+            SeriesCollection[5].Values.Add(bars[4]);
+            SeriesCollection[6].Values.Add(bars[5]);
+            SeriesCollection[7].Values.Add(bars[6]);
+            SeriesCollection[8].Values.Add(bars[7]);
         }
 
         private void Errors_Unchecked(object sender, RoutedEventArgs e)
@@ -191,6 +216,10 @@ namespace Star_Reader
             SeriesCollection[2].Values.Clear();
             SeriesCollection[3].Values.Clear();
             SeriesCollection[4].Values.Clear();
+            SeriesCollection[5].Values.Clear();
+            SeriesCollection[6].Values.Clear();
+            SeriesCollection[7].Values.Clear();
+            SeriesCollection[8].Values.Clear();
         }
 
         private void ClearSeriesCollection()

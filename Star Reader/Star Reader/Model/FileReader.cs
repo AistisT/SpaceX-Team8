@@ -25,7 +25,6 @@ namespace Star_Reader.Model
                 {
                     case 'P':
                         var payload = lines[i + 2];
-                        var message = lines[i + 3];
                         var packetend = lines[i + 3];
 
                         p = new Packet(dt, payload, pt, packetend);
