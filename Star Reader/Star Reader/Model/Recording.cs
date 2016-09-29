@@ -27,7 +27,7 @@ namespace Star_Reader.Model
                 ErrorsPresent++;
         }
 
-        public List<double> getDataRates()
+        public List<double> GetDataRates()
         {
             var timeInterval = 60;
             var recordingLength = GetDurationOfRecording();
@@ -151,20 +151,18 @@ namespace Star_Reader.Model
                 var a = ListOfPackets[i];
                 var b = ListOfPackets[i + 1];
 
-                if ((a.Payload != null) && (b.Payload != null))
-                {
-                    var aStart = a.FindStartOfPacket();
-                    var bStart = b.FindStartOfPacket();
-                    var byteArrayA = a.CreateByteArray(a.Payload.Substring(aStart));
-                    var byteArrayB = b.CreateByteArray(b.Payload.Substring(bStart));
-                    if (byteArrayA.Length == byteArrayB.Length)
-                        if (a.Convert24BitToint(00, byteArrayA[counterloc], byteArrayA[counterloc + 1]) -
-                            a.Convert24BitToint(00, byteArrayB[counterloc], byteArrayB[counterloc + 1]) == 1)
-                        {
-                            b.ErrorType += "Out of Sequence";
-                            ErrorsPresent++;
-                        }
-                }
+                if ((a.Payload == null) || (b.Payload == null)) continue;
+                var aStart = a.FindStartOfPacket();
+                var bStart = b.FindStartOfPacket();
+                var byteArrayA = a.CreateByteArray(a.Payload.Substring(aStart));
+                var byteArrayB = b.CreateByteArray(b.Payload.Substring(bStart));
+                if (byteArrayA.Length == byteArrayB.Length)
+                    if (a.Convert24BitToint(00, byteArrayA[counterloc], byteArrayA[counterloc + 1]) -
+                        a.Convert24BitToint(00, byteArrayB[counterloc], byteArrayB[counterloc + 1]) == 1)
+                    {
+                        b.ErrorType += "Out of Sequence";
+                        ErrorsPresent++;
+                    }
             }
         }
 

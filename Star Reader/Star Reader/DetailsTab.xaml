@@ -90,6 +90,10 @@
                             <DataTrigger Binding="{Binding ErrorType}" Value="Parity">
                                 <Setter Property="Background" Value="Yellow" />
                             </DataTrigger>
+                            
+                            <DataTrigger Binding="{Binding ErrorType}" Value="Out of Sequence">
+                                <Setter Property="Background" Value="Khaki" />
+                            </DataTrigger>
 
                             <DataTrigger Binding="{Binding PacketEnd}" Value="EOP">
                                 <Setter Property="Background" Value="#00dddd" /> <!--Blue-->
@@ -179,13 +183,13 @@
             </StackPanel>
 
             <StackPanel Orientation="Horizontal">
-                <Rectangle ToolTip="Disconnect error" Width="15" Height="15" Fill="#ff3333" Stroke="Black"
+                <Rectangle ToolTip="Out of sequence error" Width="15" Height="15" Fill="Khaki" Stroke="Black"
                            StrokeThickness="2" />
-                <TextBlock Padding="0,0,5,0" Text="-Disconnect error" />
+                <TextBlock Padding="0,0,5,0" Text="-Out of sequence error" />
             </StackPanel>
 
             <StackPanel Orientation="Horizontal">
-                <Rectangle ToolTip="Parity error" Width="15" Height="15" Fill="Yellow" Stroke="Black"
+                <Rectangle ToolTip="Parity Error" Width="15" Height="15" Fill="Yellow" Stroke="Black"
                            StrokeThickness="2" />
                 <TextBlock Padding="0,0,5,0" Text="-Parity error" />
             </StackPanel>
@@ -199,6 +203,12 @@
                 <Rectangle ToolTip="Packet not send" Width="15" Height="15" Fill="#ffaacc" Stroke="Black"
                            StrokeThickness="2" />
                 <TextBlock Padding="0,0,5,0" Text="-Packet not send" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal">
+                <Rectangle ToolTip="Disconnect" Width="15" Height="15" Fill="#ff3333" Stroke="Black"
+                           StrokeThickness="2" />
+                <TextBlock Padding="0,0,5,0" Text="-Disconnect" />
             </StackPanel>
 
         </WrapPanel>
