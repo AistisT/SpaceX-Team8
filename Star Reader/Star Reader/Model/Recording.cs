@@ -65,7 +65,10 @@ namespace Star_Reader.Model
                 rate += packet.GetNumberOfBytes();
             return rate;
         }
-
+        public int GetExpectedNumberOfCharacters()
+        {
+            return ListOfPackets.Count*(ListOfPackets[0].GetNumberOfBytes());
+        }
         /// <summary>
         ///     Returns the total time the recording takes. Use .TotalSeconds or .TotalMinutes to use it.
         /// </summary>

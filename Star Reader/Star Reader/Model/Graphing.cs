@@ -86,8 +86,8 @@ namespace Star_Reader.Model
 
                 var errors = new string[]
                 {
-                    "Disconnect", "Parity", "Out of Sequence.", "Babbling Idiot Detected.", "Data CRC Error.",
-                    "Header CRC Error.", "Incorrect Data Length"
+                    "Disconnect", "Parity", "Out of Sequence.", "Babbling Idiot Detected.", "Data CRC Error",
+                    "Header CRC Error", "Incorrect Data Length"
                 };
                 if (currentPacket.ErrorType != null)
                 {

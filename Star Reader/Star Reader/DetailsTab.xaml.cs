@@ -210,7 +210,7 @@ namespace Star_Reader
                             btn1.ToolTip = p.Time + "." + p.Time.ToString("fff") + "\n" + p.PacketType + "\n" + p.ErrorType;
                             btn1.Content = p.ErrorType[0];
                         }
-                        else if(p.ErrorType != null && p.ErrorType.Contains("CRC"))
+                        else if (p.ErrorType != null && p.ErrorType.Contains("CRC"))
                         {
                             btn1.Background = Brushes.Fuchsia;
                             btn1.ToolTip = p.Time + "." + p.Time.ToString("fff") + "\n" + p.PacketType + "\n" + p.ErrorType;
@@ -371,7 +371,7 @@ namespace Star_Reader
             NrOfPackets = _gData.ListOfPackets.Count;
             NrOfCharacters = _gData.GetNumberOfCharacters();
 
-            NrOfCharactersTo = NrOfCharacters;
+            NrOfCharactersTo = _gData.GetExpectedNumberOfCharacters();
             NrOfPacketsTo = NrOfPackets;
             if (NrOfCharacters == 0)
                 NrOfCharactersTo = 1;
@@ -389,10 +389,13 @@ namespace Star_Reader
         public void SetHeader(UIElement header)
         {
             var closeButton = new CloseButton();
-            closeButton.Click +=(sender, e) =>
+            closeButton.Click += (sender, e) =>
                 {
                     var tabControl = Parent as ItemsControl;
-                    tabControl?.Items.Remove(this);
+                    if (tabControl != null)
+                    {
+                        tabControl.Items.Remove(this);
+                    }
                     App.RecordingData.Remove(_gData.Port);
                     var mainWindow = (MainWindow)Application.Current.MainWindow;
                     mainWindow.UpdateStatistics();
@@ -434,7 +437,7 @@ namespace Star_Reader
                 };
                 TimeStamps.Children.Add(label);
             }
-        } 
+        }
 
         // Clear existing timeline
         private void ClearTimeStamps()

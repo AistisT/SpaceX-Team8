@@ -47,14 +47,15 @@ namespace Star_Reader
             NrOfErrors = 0;
             NrOfPackets = 0;
             NrOfCharacters = 0;
+            NrOfCharactersTo = 0;
             foreach (var recording in App.RecordingData.Values)
             {
                 NrOfErrors += recording.ErrorsPresent;
                 NrOfPackets += recording.ListOfPackets.Count;
                 NrOfCharacters += recording.GetNumberOfCharacters();
+                NrOfCharactersTo += recording.GetExpectedNumberOfCharacters();
             }
-            NrOfCharactersTo = NrOfCharacters;
-            NrOfPacketsTo = NrOfPackets;
+            NrOfPacketsTo = NrOfPackets;            
             if (NrOfCharacters == 0)
                 NrOfCharactersTo = 1;
             if (NrOfPackets == 0)
